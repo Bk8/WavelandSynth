@@ -18848,41 +18848,18 @@ public:
     {
         float F = 2 * saw1ofAngle(double_Pi * cutoff / (sampleRate * 4) + double_Pi);
         float Q = 1 / resonace;
-        filterSum1 = inputSample - filterProduct2 - filterSum3;
-        filterProduct1 = F * filterSum1;
-        filterSum2 = filterProduct1 + filterDelayTap1;
-        filterDelayTap1 = filterSum2;
-        filterProduct2 = Q * filterDelayTap1;
-        filterProduct3 = F * filterDelayTap1;
-        filterSum3 = filterProduct3 + filterDelayTap2;
-        filterDelayTap2 = filterSum3;
         
-        filterSum1 = inputSample - filterProduct2 - filterSum3;
-        filterProduct1 = F * filterSum1;
-        filterSum2 = filterProduct1 + filterDelayTap1;
-        filterDelayTap1 = filterSum2;
-        filterProduct2 = Q * filterDelayTap1;
-        filterProduct3 = F * filterDelayTap1;
-        filterSum3 = filterProduct3 + filterDelayTap2;
-        filterDelayTap2 = filterSum3;
-        
-        filterSum1 = inputSample - filterProduct2 - filterSum3;
-        filterProduct1 = F * filterSum1;
-        filterSum2 = filterProduct1 + filterDelayTap1;
-        filterDelayTap1 = filterSum2;
-        filterProduct2 = Q * filterDelayTap1;
-        filterProduct3 = F * filterDelayTap1;
-        filterSum3 = filterProduct3 + filterDelayTap2;
-        filterDelayTap2 = filterSum3;
-        
-        filterSum1 = inputSample - filterProduct2 - filterSum3;
-        filterProduct1 = F * filterSum1;
-        filterSum2 = filterProduct1 + filterDelayTap1;
-        filterDelayTap1 = filterSum2;
-        filterProduct2 = Q * filterDelayTap1;
-        filterProduct3 = F * filterDelayTap1;
-        filterSum3 = filterProduct3 + filterDelayTap2;
-        filterDelayTap2 = filterSum3;
+        for (int i = 0; i < 4; i++)
+            {
+                filterSum1 = inputSample - filterProduct2 - filterSum3;
+                filterProduct1 = F * filterSum1;
+                filterSum2 = filterProduct1 + filterDelayTap1;
+                filterDelayTap1 = filterSum2;
+                filterProduct2 = Q * filterDelayTap1;
+                filterProduct3 = F * filterDelayTap1;
+                filterSum3 = filterProduct3 + filterDelayTap2;
+                filterDelayTap2 = filterSum3;
+            }
         
         return filterSum3;
     }
