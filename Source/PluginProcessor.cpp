@@ -29,7 +29,7 @@ public:
 /** A simple demo synth voice that just plays a sine wave.. */
 class SineWaveVoice  : public SynthesiserVoice
 
-// stupid comment but now with tacos
+// stupid comment but now with moar tacos
 
 
 {
