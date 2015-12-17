@@ -19028,18 +19028,6 @@ void WavelandSynthAudioProcessor::prepareToPlay (double newSampleRate, int /*sam
     // initialisation that you need...
     synth.setCurrentPlaybackSampleRate (newSampleRate);
     keyboardState.reset();
-    
-    if (isUsingDoublePrecision())
-    {
-        delayBufferDouble.setSize (1, 12000);
-        delayBufferFloat.setSize (1, 1);
-    }
-    else
-    {
-        delayBufferFloat.setSize (2, 12000);
-        delayBufferDouble.setSize (1, 1);
-    }
-    
     reset();
 }
 
@@ -19052,10 +19040,6 @@ void WavelandSynthAudioProcessor::releaseResources()
 
 void WavelandSynthAudioProcessor::reset()
 {
-    //
-    //
-    delayBufferFloat.clear();
-    delayBufferDouble.clear();
 }
 
 template <typename FloatType>
@@ -19065,65 +19049,17 @@ void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
 {
     const int numSamples = buffer.getNumSamples();
     
-    //
-    applyGain(buffer, delayBuffer);
-    
-    //
-    //
+   
     keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
     
     updateParameters();
     
     synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
-    
-    //
-    applyDelay(buffer, delayBuffer);
-    
-    //
-    //
-    //
+
     for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
         buffer.clear (i, 0, numSamples);
-    //
+    
     updateCurrentTimeInfoFromHost();
-}
-
-template <typename FloatType>
-void WavelandSynthAudioProcessor::applyGain(AudioBuffer<FloatType>& buffer, AudioBuffer<FloatType>& delayBuffer)
-{
-    ignoreUnused (delayBuffer);
-    const float gainLevel = *gainParam;
-    
-    for (int channel = 0; channel < getNumInputChannels(); ++channel)
-        buffer.applyGain (channel, 0, buffer.getNumSamples(), gainLevel);
-}
-
-template <typename FloatType>
-void WavelandSynthAudioProcessor::applyDelay(AudioBuffer<FloatType>& buffer, AudioBuffer<FloatType> &delayBuffer)
-{
-    const int numSamples = buffer.getNumSamples();
-    const float delayLevel = *delayParam;
-    
-    int delayPos = 0;
-    
-    for (int channel = 0; channel < getNumInputChannels(); ++channel)
-    {
-        FloatType* const channelData = buffer.getWritePointer (channel);
-        FloatType* const delayData = delayBuffer.getWritePointer (jmin(channel, delayBuffer.getNumChannels() - 1));
-        delayPos = delayPosition;
-        
-        for (int i = 0; i < numSamples; ++i)
-        {
-            const FloatType in = channelData[i];
-            channelData[i] += delayData[delayPos];
-            delayData[delayPos] = (delayData[delayPos] +in) * delayLevel;
-            
-            if (++delayPos >= delayBuffer.getNumSamples())
-                delayPos = 0;
-        }
-    }
-    
-    delayPosition = delayPos;
 }
 
 void WavelandSynthAudioProcessor::updateCurrentTimeInfoFromHost()

@@ -57,8 +57,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     : AudioProcessorEditor (owner),
       midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
       timecodeDisplayLabel (String::empty),
-      gainLabel (String::empty, "Throughput level:"),
-      delayLabel (String::empty, "Delay:"),
       bendAmountLabel (String::empty, "Bend Amount:"),
       detuneLabel (String::empty, "Detune:"),
       balanceLabel (String::empty, "OSC Balance:"),
@@ -66,13 +64,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       resonaceLabel ( String::empty, "Resonace:")
 {
     // add some sliders..
-    addAndMakeVisible (gainSlider = new ParameterSlider (*owner.gainParam));
-    gainSlider->setSliderStyle (Slider::Rotary);
-    gainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, gainSlider->getTextBoxHeight());
-    
-    addAndMakeVisible (delaySlider = new ParameterSlider (*owner.delayParam));
-    delaySlider->setSliderStyle (Slider::Rotary);
-    delaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, delaySlider->getTextBoxHeight());
     
     addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
     bendAmountSlider->setSliderStyle (Slider::Rotary);
@@ -96,13 +87,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     
     // add some labels for the sliders..
-    gainLabel.attachToComponent (gainSlider, false);
-    gainLabel.setFont (Font (11.0f));
-    gainLabel.setJustificationType(Justification::centred);
-    
-    delayLabel.attachToComponent (delaySlider, false);
-    delayLabel.setFont (Font (11.0f));
-    delayLabel.setJustificationType(Justification::centred);
     
     bendAmountLabel.attachToComponent(bendAmountSlider, false);
     bendAmountLabel.setFont (Font (11.0f));
@@ -167,13 +151,11 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     r.removeFromTop (30);
     Rectangle<int> sliderArea (r.removeFromTop (50));
-    gainSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 1)));
-    delaySlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 2)));
-    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth()/ 8 * 3)));
-    detuneSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 4)));
-    balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 5)));
-    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 6)));
-    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 7)));
+    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth()/ 8 * 1)));
+    detuneSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 2)));
+    balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 3)));
+    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 4)));
+    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 5)));
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     
