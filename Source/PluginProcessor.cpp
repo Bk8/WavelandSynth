@@ -29,8 +29,6 @@ public:
 /** A simple demo synth voice that just plays a sine wave.. */
 class SineWaveVoice  : public SynthesiserVoice
 
-// stupid comment but now without any tacos
-
 
 {
 public:
@@ -18524,6 +18522,7 @@ public:
             0
         };
     
+    
     float saw200ofAngle (float angle)
     {
         float index;
@@ -18537,7 +18536,6 @@ public:
         
         return SAW200[indexIntPart] + (difference * indexDecimelPart);
     }
-    
     
     float saw100ofAngle (float angle)
     {
