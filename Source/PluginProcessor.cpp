@@ -19051,9 +19051,9 @@ void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
     
     synth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 
-    for (int i = getNumInputChannels(); i < getNumOutputChannels(); ++i)
+    for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
         buffer.clear (i, 0, numSamples);
-    
+ 
     updateCurrentTimeInfoFromHost();
 }
 
