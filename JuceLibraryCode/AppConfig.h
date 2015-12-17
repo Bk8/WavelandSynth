@@ -247,15 +247,6 @@
 #ifndef  JucePlugin_PluginCode
  #define JucePlugin_PluginCode             'SLWS'
 #endif
-#ifndef  JucePlugin_MaxNumInputChannels
- #define JucePlugin_MaxNumInputChannels    2
-#endif
-#ifndef  JucePlugin_MaxNumOutputChannels
- #define JucePlugin_MaxNumOutputChannels   2
-#endif
-#ifndef  JucePlugin_PreferredChannelConfigurations
- #define JucePlugin_PreferredChannelConfigurations  {1, 1}, {2, 2}
-#endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
 #endif
@@ -263,7 +254,10 @@
  #define JucePlugin_WantsMidiInput         1
 #endif
 #ifndef  JucePlugin_ProducesMidiOutput
- #define JucePlugin_ProducesMidiOutput     1
+ #define JucePlugin_ProducesMidiOutput     0
+#endif
+#ifndef  JucePlugin_IsMidiEffect
+ #define JucePlugin_IsMidiEffect           0
 #endif
 #ifndef  JucePlugin_SilenceInProducesSilenceOut
  #define JucePlugin_SilenceInProducesSilenceOut  0
@@ -272,13 +266,13 @@
  #define JucePlugin_EditorRequiresKeyboardFocus  1
 #endif
 #ifndef  JucePlugin_Version
- #define JucePlugin_Version                1.0.3
+ #define JucePlugin_Version                1.0.4
 #endif
 #ifndef  JucePlugin_VersionCode
- #define JucePlugin_VersionCode            0x10003
+ #define JucePlugin_VersionCode            0x10004
 #endif
 #ifndef  JucePlugin_VersionString
- #define JucePlugin_VersionString          "1.0.3"
+ #define JucePlugin_VersionString          "1.0.4"
 #endif
 #ifndef  JucePlugin_VSTUniqueID
  #define JucePlugin_VSTUniqueID            JucePlugin_PluginCode
@@ -336,6 +330,15 @@
 #endif
 #ifndef  JucePlugin_AAXDisableMultiMono
  #define JucePlugin_AAXDisableMultiMono    0
+#endif
+#ifndef  JucePlugin_MaxNumInputChannels
+ #define JucePlugin_MaxNumInputChannels    2
+#endif
+#ifndef  JucePlugin_MaxNumOutputChannels
+ #define JucePlugin_MaxNumOutputChannels   2
+#endif
+#ifndef  JucePlugin_PreferredChannelConfigurations
+ #define JucePlugin_PreferredChannelConfigurations  {1, 1}, {2, 2}
 #endif
 
 #endif  // __JUCE_APPCONFIG_MGUZ4F__

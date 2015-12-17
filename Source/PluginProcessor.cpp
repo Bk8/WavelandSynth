@@ -18949,22 +18949,18 @@ private:
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     : lastUIWidth (800),
       lastUIHeight (200),
-      gainParam (nullptr),
-      delayParam (nullptr),
       bendAmountParam (nullptr),
       detuneParam(nullptr),
       balanceParam(nullptr),
       cutoffParam(nullptr),
-      resonaceParam(nullptr),
-      delayPosition (0)
+      resonaceParam(nullptr)
 {
     lastPosInfo.resetToDefault();
     
     //
     //
     //
-    addParameter(gainParam = new AudioParameterFloat ("gain", "Gain",             0.0f, 1.0f, 0.9f));
-    addParameter(delayParam = new AudioParameterFloat ("delay", "Delay Feedback", 0.0f, 1.0f, 0.0f));
+
     addParameter(bendAmountParam = new AudioParameterFloat ("bend", "Bend Amount", 0.0f, 1.0f, 0.5f));
     addParameter(detuneParam = new AudioParameterFloat ("detune", "Oscillator Detune", 0.0f, 1.0f, 1.0f));
     addParameter(balanceParam = new AudioParameterFloat ("balance","Oscillator Balance", 0.0f, 1.0f, 0.5f));
@@ -19044,8 +19040,7 @@ void WavelandSynthAudioProcessor::reset()
 
 template <typename FloatType>
 void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
-                                           MidiBuffer &midiMessages,
-                                           AudioBuffer<FloatType>& delayBuffer)
+                                           MidiBuffer &midiMessages)
 {
     const int numSamples = buffer.getNumSamples();
     

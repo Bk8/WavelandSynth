@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.3"
+<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.4"
               bundleIdentifier="com.Snowland.WavelandSynth" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="WavelandSynth" pluginDesc="WavelandSynth" pluginManufacturer="Snowland"
               pluginManufacturerCode="SNLD" pluginCode="SLWS" pluginChannelConfigs="{1, 1}, {2, 2}"
-              pluginIsSynth="0" pluginWantsMidiIn="1" pluginProducesMidiOut="1"
+              pluginIsSynth="0" pluginWantsMidiIn="1" pluginProducesMidiOut="0"
               pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="1"
               pluginAUExportPrefix="WavelandSynthAU" pluginRTASCategory=""
               aaxIdentifier="com.yourcompany.WavelandSynth" pluginAAXCategory="AAX_ePlugInCategory_Dynamics"
-              jucerVersion="4.0.2">
+              jucerVersion="4.1.0" pluginIsMidiEffectPlugin="0">
   <MAINGROUP id="q1WoGb" name="WavelandSynth">
     <GROUP id="{63611963-6FAB-EA92-3970-D080340149B3}" name="Source">
       <FILE id="r2fwzP" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -19,7 +19,6 @@
       <FILE id="JHF2mT" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="LPPY0n" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="kQgh46" name="SinewaveSynth.h" compile="0" resource="0" file="Source/SinewaveSynth.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
