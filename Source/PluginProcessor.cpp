@@ -44,6 +44,7 @@ public:
       filterSum3 (0.0)
     
     {
+        srand (static_cast <unsigned> (time(0)));
     }
     
     float SAW200 [2049] =
@@ -18793,7 +18794,10 @@ public:
                     SynthesiserSound* /*sound*/,
                     int currentPitchWheelPosition) override
     {
-        //currentAngle = 0.0;
+        float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*double_Pi)));
+        float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*double_Pi)));
+        currentAngleOSC1 = startangleosc1;
+        currentAngleOSC2 = startangleosc2;
         level = velocity * 0.15;
         tailOff = 0.0;
         
