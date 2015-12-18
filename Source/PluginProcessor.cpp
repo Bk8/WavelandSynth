@@ -18534,7 +18534,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW200[indexIntPart +1] - SAW200[indexIntPart];
         
@@ -18548,7 +18548,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW100[indexIntPart +1] - SAW100[indexIntPart];
         
@@ -18562,7 +18562,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW50[indexIntPart +1] - SAW50[indexIntPart];
         
@@ -18576,7 +18576,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW24[indexIntPart +1] - SAW24[indexIntPart];
         
@@ -18590,7 +18590,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW12[indexIntPart +1] - SAW12[indexIntPart];
         
@@ -18604,7 +18604,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW6[indexIntPart +1] - SAW6[indexIntPart];
         
@@ -18618,7 +18618,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW4[indexIntPart +1] - SAW4[indexIntPart];
         
@@ -18632,7 +18632,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW2[indexIntPart +1] - SAW2[indexIntPart];
         
@@ -18646,7 +18646,7 @@ public:
         float indexDecimelPart;
         float difference;
         index = (angle / (2 * float_Pi) * 2048);
-        indexIntPart = (int) index;
+        indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW1[indexIntPart +1] - SAW1[indexIntPart];
         
@@ -18657,7 +18657,7 @@ public:
     float sawOfAngle (float angle, int pitchInHertz)
     {
         
-        switch ((int) pitchInHertz) {
+        switch (static_cast<int>(pitchInHertz)) {
                 
             case 0 ... 49:
                 return saw200ofAngle(angle);
@@ -18665,49 +18665,49 @@ public:
                 
             case 50 ... 99:
                 float toStartofCaseF;
-                toStartofCaseF = (pitchInHertz - 50) / 49;
+                toStartofCaseF = (pitchInHertz - 50.0f) / 49.0f;
                 return (saw100ofAngle(angle) * toStartofCaseF) + (saw200ofAngle(angle) * (1-toStartofCaseF));
                 break;
                 
             case 100 ... 199:
                 float toStartofCase0;
-                toStartofCase0 = (pitchInHertz - 100) / 99;
+                toStartofCase0 = (pitchInHertz - 100.0f) / 99.0f;
                 return (saw50ofAngle(angle) * toStartofCase0) + (saw100ofAngle(angle) * (1-toStartofCase0));
                 break;
                 
             case 200 ... 399:
                 float toStartofCase1;
-                toStartofCase1 = (pitchInHertz - 200) / 199;
+                toStartofCase1 = (pitchInHertz - 200.0f) / 199.0f;
                 return (saw24ofAngle(angle) * toStartofCase1) + (saw50ofAngle(angle) * (1-toStartofCase1));
                 break;
                 
             case 400 ... 799:
                 float toStartofCase2;
-                toStartofCase2 = (pitchInHertz - 400) / 399;
+                toStartofCase2 = (pitchInHertz - 400.0f) / 399.0f;
                 return (saw12ofAngle(angle) * toStartofCase2) + (saw24ofAngle(angle) * (1-toStartofCase2));
                 break;
                 
             case 800 ... 1599:
                 float toStartofCase3;
-                toStartofCase3 = (pitchInHertz - 800) / 799;
+                toStartofCase3 = (pitchInHertz - 800.0f) / 799.0f;
                 return (saw6ofAngle(angle) * toStartofCase3) + (saw12ofAngle(angle) * (1-toStartofCase3));
                 break;
                 
             case 1600 ... 2499:
                 float toStartofCase4;
-                toStartofCase4 = (pitchInHertz - 1600) / 899;
+                toStartofCase4 = (pitchInHertz - 1600.0f) / 899.0f;
                 return (saw4ofAngle(angle) * toStartofCase4) + (saw6ofAngle(angle) * (1-toStartofCase4));
                 break;
                 
             case 2500 ... 4999:
                 float toStartofCase5;
-                toStartofCase5 = (pitchInHertz - 2500) / 2499;
+                toStartofCase5 = (pitchInHertz - 2500.0f) / 2499.0f;
                 return (saw2ofAngle(angle) * toStartofCase5) + (saw4ofAngle(angle) * (1-toStartofCase5));
                 break;
                 
             case 5000 ... 9999:
                 float toStartofCase6;
-                toStartofCase6 = (pitchInHertz - 5000) / 4999;
+                toStartofCase6 = (pitchInHertz - 5000.0f) / 4999.0f;
                 return (saw1ofAngle(angle) * toStartofCase6) + (saw2ofAngle(angle) * (1-toStartofCase6));
                 break;
                 
@@ -18824,6 +18824,8 @@ public:
             clearCurrentNote();
             angleDeltaOSC1 = 0.0;
             angleDeltaOSC2 = 0.0;
+            currentAngleOSC1 = 0.0;
+            currentAngleOSC2 = 0.0;
         }
     }
     
@@ -18932,8 +18934,10 @@ private:
                     if (tailOff <= 0.005)
                     {
                         clearCurrentNote();
-                        
-                        angleDelta = 0.0;
+                        angleDeltaOSC1 = 0.0;
+                        angleDeltaOSC2 = 0.0;
+                        currentAngleOSC1 = 0.0;
+                        currentAngleOSC2 = 0.0;
                         break;
                     }
                 }
