@@ -18533,7 +18533,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW200[indexIntPart +1] - SAW200[indexIntPart];
@@ -18547,7 +18547,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW100[indexIntPart +1] - SAW100[indexIntPart];
@@ -18561,7 +18561,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW50[indexIntPart +1] - SAW50[indexIntPart];
@@ -18575,7 +18575,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW24[indexIntPart +1] - SAW24[indexIntPart];
@@ -18589,7 +18589,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW12[indexIntPart +1] - SAW12[indexIntPart];
@@ -18603,7 +18603,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW6[indexIntPart +1] - SAW6[indexIntPart];
@@ -18617,7 +18617,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW4[indexIntPart +1] - SAW4[indexIntPart];
@@ -18631,7 +18631,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW2[indexIntPart +1] - SAW2[indexIntPart];
@@ -18645,7 +18645,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * double_Pi) * 2048);
+        index = (angle / (2 * float_Pi) * 2048);
         indexIntPart = (int) index;
         indexDecimelPart = index - indexIntPart;
         difference = SAW1[indexIntPart +1] - SAW1[indexIntPart];
@@ -18782,13 +18782,13 @@ public:
     void updateAngleDeltas (int currentNote, double pitchWheelAmount)
     {
         //double cyclesPerSecond = 440 * pow (2.0, ((currentNote + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
-        double cyclesPerSecondOCS1 = 440 * pow (2.0, ((currentNote + detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
-        double cyclesPerSecondOCS2 = 440 * pow (2.0, ((currentNote - detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
-        double cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
-        double cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
+        float cyclesPerSecondOCS1 = 440 * pow (2.0, ((currentNote + detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
+        float cyclesPerSecondOCS2 = 440 * pow (2.0, ((currentNote - detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
+        float cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
+        float cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
         
-        angleDeltaOSC1 = cyclesPerSampleOSC1 * 2.0 * double_Pi;
-        angleDeltaOSC2 = cyclesPerSampleOSC2 * 2.0 * double_Pi;
+        angleDeltaOSC1 = cyclesPerSampleOSC1 * 2.0 * float_Pi;
+        angleDeltaOSC2 = cyclesPerSampleOSC2 * 2.0 * float_Pi;
         currentPitchInHertzOSC1 = float (cyclesPerSecondOCS1);
         currentPitchInHertzOSC2 = float (cyclesPerSecondOCS2);
     }
@@ -18797,8 +18797,8 @@ public:
                     SynthesiserSound* /*sound*/,
                     int currentPitchWheelPosition) override
     {
-        float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*double_Pi)));
-        float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*double_Pi)));
+        float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
+        float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
         currentAngleOSC1 = startangleosc1;
         currentAngleOSC2 = startangleosc2;
         level = velocity * 0.15;
@@ -18860,7 +18860,7 @@ public:
     
     float filterSound (float inputSample, float cutoff, float resonace)
     {
-        float F = 2 * saw1ofAngle(double_Pi * cutoff / (sampleRate * 4) + double_Pi);
+        float F = 2 * saw1ofAngle(float_Pi * cutoff / (sampleRate * 4) + float_Pi);
         float Q = 1 / resonace;
         
         for (int i = 0; i < 4; i++)
@@ -18917,13 +18917,13 @@ private:
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
-                    if (currentAngleOSC1 >= 2 * double_Pi)
-                        currentAngleOSC1 -= 2 * double_Pi;
+                    if (currentAngleOSC1 >= 2 * float_Pi)
+                        currentAngleOSC1 -= 2 * float_Pi;
                     
                     currentAngleOSC2 += angleDeltaOSC2;
                     
-                    if (currentAngleOSC2 >= 2 * double_Pi)
-                        currentAngleOSC2 -= 2 * double_Pi;
+                    if (currentAngleOSC2 >= 2 * float_Pi)
+                        currentAngleOSC2 -= 2 * float_Pi;
                     
                     ++startSample;
                     
@@ -18949,13 +18949,13 @@ private:
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
-                    if (currentAngleOSC1 >= 2 * double_Pi)
-                        currentAngleOSC1 -= 2 * double_Pi;
+                    if (currentAngleOSC1 >= 2 * float_Pi)
+                        currentAngleOSC1 -= 2 * float_Pi;
                     
                     currentAngleOSC2 += angleDeltaOSC2;
                     
-                    if (currentAngleOSC2 >= 2 * double_Pi)
-                        currentAngleOSC2 -= 2 * double_Pi;
+                    if (currentAngleOSC2 >= 2 * float_Pi)
+                        currentAngleOSC2 -= 2 * float_Pi;
                     
                     ++startSample;
                 }
@@ -18963,7 +18963,7 @@ private:
         }
     }
     
-    double currentAngle, currentAngleOSC1, currentAngleOSC2, angleDelta, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
+    float currentAngle, currentAngleOSC1, currentAngleOSC2, angleDelta, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
     float currentPitchInHertzOSC1, currentPitchInHertzOSC2;
     float bendAmount, detune, balance, cutoff, resonace;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
