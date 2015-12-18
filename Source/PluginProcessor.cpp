@@ -39,9 +39,12 @@ public:
       balance(0.5),
       cutoff (0.5),
       resonace (0.5),
-      filterDelayTap1 (0.0),
-      filterDelayTap2 (0.0),
-      filterSum3 (0.0)
+      filter1DelayTap1 (0.0),
+      filter1DelayTap2 (0.0),
+      filter1Sum3 (0.0),
+      filter2DelayTap1 (0.0),
+      filter2DelayTap2 (0.0),
+      filter2Sum3 (0.0)
     
     {
         srand (static_cast <unsigned> (time(0)));
@@ -18836,14 +18839,23 @@ public:
     
     void innitFilter ()
     {
-        filterSum1 = 0.0f;
-        filterSum2 = 0.0f;
-        filterSum3 = 0.0f;
-        filterProduct1 = 0.0f;
-        filterProduct2 = 0.0f;
-        filterProduct3  = 0.0f;
-        filterDelayTap1 = 0.0f;
-        filterDelayTap2 = 0.0f;
+        filter1Sum1 = 0.0f;
+        filter1Sum2 = 0.0f;
+        filter1Sum3 = 0.0f;
+        filter1Product1 = 0.0f;
+        filter1Product2 = 0.0f;
+        filter1Product3  = 0.0f;
+        filter1DelayTap1 = 0.0f;
+        filter1DelayTap2 = 0.0f;
+        
+        filter2Sum1 = 0.0f;
+        filter2Sum2 = 0.0f;
+        filter2Sum3 = 0.0f;
+        filter2Product1 = 0.0f;
+        filter2Product2 = 0.0f;
+        filter2Product3  = 0.0f;
+        filter2DelayTap1 = 0.0f;
+        filter2DelayTap2 = 0.0f;
     }
     
     float filterSound (float inputSample, float cutoff, float resonace)
@@ -18853,17 +18865,26 @@ public:
         
         for (int i = 0; i < 4; i++)
             {
-                filterSum1 = inputSample - filterProduct2 - filterSum3;
-                filterProduct1 = F * filterSum1;
-                filterSum2 = filterProduct1 + filterDelayTap1;
-                filterDelayTap1 = filterSum2;
-                filterProduct2 = Q * filterDelayTap1;
-                filterProduct3 = F * filterDelayTap1;
-                filterSum3 = filterProduct3 + filterDelayTap2;
-                filterDelayTap2 = filterSum3;
+                filter1Sum1 = inputSample - filter1Product2 - filter1Sum3;
+                filter1Product1 = F * filter1Sum1;
+                filter1Sum2 = filter1Product1 + filter1DelayTap1;
+                filter1DelayTap1 = filter1Sum2;
+                filter1Product2 = Q * filter1DelayTap1;
+                filter1Product3 = F * filter1DelayTap1;
+                filter1Sum3 = filter1Product3 + filter1DelayTap2;
+                filter1DelayTap2 = filter1Sum3;
+
+                filter2Sum1 = filter1Sum3 - filter2Product2 - filter2Sum3;
+                filter2Product1 = F * filter2Sum1;
+                filter2Sum2 = filter2Product1 + filter2DelayTap1;
+                filter2DelayTap1 = filter2Sum2;
+                filter2Product2 = Q * filter2DelayTap1;
+                filter2Product3 = F * filter2DelayTap1;
+                filter2Sum3 = filter2Product3 + filter2DelayTap2;
+                filter2DelayTap2 = filter2Sum3;
             }
         
-        return filterSum3;
+        return filter2Sum3;
     }
     
     
@@ -18945,7 +18966,8 @@ private:
     double currentAngle, currentAngleOSC1, currentAngleOSC2, angleDelta, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
     float currentPitchInHertzOSC1, currentPitchInHertzOSC2;
     float bendAmount, detune, balance, cutoff, resonace;
-    float filterDelayTap1, filterDelayTap2, filterSum1, filterSum2, filterSum3, filterProduct1, filterProduct2, filterProduct3;
+    float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
+    float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     
 };
 //==============================================================================
