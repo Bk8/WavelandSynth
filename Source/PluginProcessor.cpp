@@ -33,7 +33,8 @@ class SineWaveVoice  : public SynthesiserVoice
 {
 public:
     SineWaveVoice()
-    : angleDelta (0.0),
+    : angleDeltaOSC1 (0.0),
+      angleDeltaOSC2 (0.0),
       tailOff (0.0),
       sampleRate (SynthesiserVoice::getSampleRate()),
       balance(0.5),
@@ -18893,8 +18894,6 @@ public:
     
     float filterSound (float inputSample, float cutoffKnobPercent, float cutoffKeytrackPercent, float resonace)
     {
-        updateFilterParams();
-        
         for (int i = 0; i < 4; i++)
             {
                 filter1Sum1 = inputSample - filter1Product2 - filter1Sum3;
@@ -18997,9 +18996,10 @@ private:
         }
     }
     
-    float currentAngle, currentAngleOSC1, currentAngleOSC2, angleDelta, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
+    float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
     float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
-    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace, filterF, filterQ;
+    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace;
+    float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     
