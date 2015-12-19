@@ -37,7 +37,8 @@ public:
       tailOff (0.0),
       sampleRate (SynthesiserVoice::getSampleRate()),
       balance(0.5),
-      cutoff (0.5),
+      cutoffKnob (0.5),
+      cutoffKeytrack (1.0),
       resonace (0.5),
       filter1DelayTap1 (0.0),
       filter1DelayTap2 (0.0),
@@ -18728,14 +18729,14 @@ public:
         return dynamic_cast<SineWaveSound*> (sound) != nullptr;
     }
     
-    float getCutoff ()
+    float getCutoffKnob ()
     {
-        return cutoff;
+        return cutoffKnob;
     }
     
-    void setCutoff (float cutParam)
+    void setCutoffKnob (float cutParam)
     {
-        cutoff = 440 * pow (2.0, ((cutParam * 135) - 69.0) / 12.0);
+        cutoffKnob = cutParam;
     }
     
     float getResonace ()
@@ -18745,7 +18746,7 @@ public:
     
     void setResonance (float resoparam)
     {
-        resonace = resoparam * 2 + .5;
+        resonace = resoparam * 2.0 + 0.5;
     }
     
     float getbendAmount ()
@@ -18755,7 +18756,7 @@ public:
     
     void setbendAmount (float bendParam)
     {
-        bendAmount = bendParam * 2;
+        bendAmount = bendParam * 2.0;
     }
     
     float getdetune ()
@@ -18765,7 +18766,7 @@ public:
     
     void setdetune (float detuneParam)
     {
-        detune = detuneParam * .1;
+        detune = detuneParam * 0.1;
     }
     
     float getbalance ()
@@ -18778,12 +18779,22 @@ public:
         balance = balParam;
     }
     
+    float getKeytrack ()
+    {
+        return cutoffKeytrack;
+    }
+    
+    void setKeytrack (float keyParam)
+    {
+        cutoffKeytrack = keyParam;
+    }
     
     void updateAngleDeltas (int currentNote, double pitchWheelAmount)
     {
-        //double cyclesPerSecond = 440 * pow (2.0, ((currentNote + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
-        float cyclesPerSecondOCS1 = 440 * pow (2.0, ((currentNote + detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
-        float cyclesPerSecondOCS2 = 440 * pow (2.0, ((currentNote - detune + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount) - 69.0) / 12.0) ;
+        voiceCurentNote = currentNote + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount;
+        
+        float cyclesPerSecondOCS1 = 440.0 * pow (2.0, (voiceCurentNote + detune - 69.0) / 12.0) ;
+        float cyclesPerSecondOCS2 = 440.0 * pow (2.0, (voiceCurentNote - detune - 69.0) / 12.0) ;
         float cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
         float cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
         
@@ -18797,10 +18808,12 @@ public:
                     SynthesiserSound* /*sound*/,
                     int currentPitchWheelPosition) override
     {
+        voiceCurentNote = midiNoteNumber;
         float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
         float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
         currentAngleOSC1 = startangleosc1;
         currentAngleOSC2 = startangleosc2;
+        updateFilterParams();
         level = velocity * 0.15;
         tailOff = 0.0;
         
@@ -18832,6 +18845,7 @@ public:
     void pitchWheelMoved (int newValue) override
     {
         updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), newValue);
+        updateFilterParams();
     }
     
     void controllerMoved (int /*controllerNumber*/, int /*newValue*/) override
@@ -18860,28 +18874,44 @@ public:
         filter2DelayTap2 = 0.0f;
     }
     
-    float filterSound (float inputSample, float cutoff, float resonace)
+    void updateFilterParams ()
     {
-        float F = 2 * saw1ofAngle(float_Pi * cutoff / (sampleRate * 4) + float_Pi);
-        float Q = 1 / resonace;
+        if (cutoffKnob != cutoffKnobPrev || cutoffKeytrack != cutoffKeytrackPrev || voiceCurentNote != voiceCurentNotePrev)
+            {
+                float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
+                float cutoffFromKnob = (135.0 - cutoffFromKeytrack) * cutoffKnob;
+                float cutoffNote = cutoffFromKnob + cutoffFromKeytrack;
+                float cutoff = 440.0 * pow (2.0, (cutoffNote - 69.0) / 12.0) ;;
+                filterF = 2.0 * saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
+            }
+        cutoffKnobPrev = cutoffKnob * 1.0;
+        cutoffKeytrackPrev = cutoffKeytrack * 1.0;
+        voiceCurentNotePrev = voiceCurentNote * 1.0;
+        filterQ = 1.0 / resonace;
+        
+    }
+    
+    float filterSound (float inputSample, float cutoffKnobPercent, float cutoffKeytrackPercent, float resonace)
+    {
+        updateFilterParams();
         
         for (int i = 0; i < 4; i++)
             {
                 filter1Sum1 = inputSample - filter1Product2 - filter1Sum3;
-                filter1Product1 = F * filter1Sum1;
+                filter1Product1 = filterF * filter1Sum1;
                 filter1Sum2 = filter1Product1 + filter1DelayTap1;
                 filter1DelayTap1 = filter1Sum2;
-                filter1Product2 = Q * filter1DelayTap1;
-                filter1Product3 = F * filter1DelayTap1;
+                filter1Product2 = filterQ * filter1DelayTap1;
+                filter1Product3 = filterF * filter1DelayTap1;
                 filter1Sum3 = filter1Product3 + filter1DelayTap2;
                 filter1DelayTap2 = filter1Sum3;
 
                 filter2Sum1 = filter1Sum3 - filter2Product2 - filter2Sum3;
-                filter2Product1 = F * filter2Sum1;
+                filter2Product1 = filterF * filter2Sum1;
                 filter2Sum2 = filter2Product1 + filter2DelayTap1;
                 filter2DelayTap1 = filter2Sum2;
-                filter2Product2 = Q * filter2DelayTap1;
-                filter2Product3 = F * filter2DelayTap1;
+                filter2Product2 = filterQ * filter2DelayTap1;
+                filter2Product3 = filterF * filter2DelayTap1;
                 filter2Sum3 = filter2Product3 + filter2DelayTap2;
                 filter2DelayTap2 = filter2Sum3;
             }
@@ -18912,7 +18942,7 @@ private:
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level * tailOff), cutoff, resonace));
+                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level * tailOff), cutoffKnob, cutoffKeytrack, resonace));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);
@@ -18946,7 +18976,7 @@ private:
             {
                 while (--numSamples >= 0)
                 {
-                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level, cutoff, resonace));
+                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level, cutoffKnob, cutoffKeytrack, resonace));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);
@@ -18968,8 +18998,8 @@ private:
     }
     
     float currentAngle, currentAngleOSC1, currentAngleOSC2, angleDelta, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
-    float currentPitchInHertzOSC1, currentPitchInHertzOSC2;
-    float bendAmount, detune, balance, cutoff, resonace;
+    float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
+    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace, filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     
@@ -18982,20 +19012,18 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
       bendAmountParam (nullptr),
       detuneParam(nullptr),
       balanceParam(nullptr),
-      cutoffParam(nullptr),
-      resonaceParam(nullptr)
+      cutoffKnobParam(nullptr),
+      resonaceParam(nullptr),
+      keytrackParam(nullptr)
 {
     lastPosInfo.resetToDefault();
-    
-    //
-    //
-    //
 
     addParameter(bendAmountParam = new AudioParameterFloat ("bend", "Bend Amount", 0.0f, 1.0f, 0.5f));
     addParameter(detuneParam = new AudioParameterFloat ("detune", "Oscillator Detune", 0.0f, 1.0f, 1.0f));
     addParameter(balanceParam = new AudioParameterFloat ("balance","Oscillator Balance", 0.0f, 1.0f, 0.5f));
-    addParameter(cutoffParam = new AudioParameterFloat ("cutoff", "Filter Cutoff", 0.0f, 1.0f, 0.5f));
+    addParameter(cutoffKnobParam = new AudioParameterFloat ("cutoff", "Filter Cutoff", 0.0f, 1.0f, 0.5f));
     addParameter(resonaceParam = new AudioParameterFloat ("resonace", "Filter Resonace", 0.0f, 1.0f, 0.5f));
+    addParameter(keytrackParam = new AudioParameterFloat("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
 
     initialiseSynth();
 }
@@ -19009,8 +19037,10 @@ void WavelandSynthAudioProcessor::updateParameters()
             myVoice->setbendAmount (*bendAmountParam);
             myVoice->setdetune (*detuneParam);
             myVoice->setbalance (*balanceParam);
-            myVoice->setCutoff (*cutoffParam);
-            myVoice->setResonance(*resonaceParam);
+            myVoice->setCutoffKnob (*cutoffKnobParam);
+            myVoice->setResonance (*resonaceParam);
+            myVoice->setKeytrack (*keytrackParam);
+            myVoice->updateFilterParams();
         }
     }
 }
@@ -19035,8 +19065,9 @@ void WavelandSynthAudioProcessor::initialiseSynth()
                 myVoice->setbendAmount (*bendAmountParam);
                 myVoice->setdetune (*detuneParam);
                 myVoice->setbalance (*balanceParam);
-                myVoice->setCutoff (*cutoffParam);
-                myVoice->setResonance(*resonaceParam);
+                myVoice->setCutoffKnob (*cutoffKnobParam);
+                myVoice->setResonance (*resonaceParam);
+                myVoice->setKeytrack (*keytrackParam);
                 myVoice->innitFilter();
             }
     }
@@ -19053,6 +19084,7 @@ void WavelandSynthAudioProcessor::prepareToPlay (double newSampleRate, int /*sam
     // Use this method as the place to do any pre-playback
     // initialisation that you need...
     synth.setCurrentPlaybackSampleRate (newSampleRate);
+    updateParameters();
     keyboardState.reset();
     reset();
 }

@@ -61,7 +61,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       detuneLabel (String::empty, "Detune:"),
       balanceLabel (String::empty, "OSC Balance:"),
       cutoffLabel (String::empty, "Cutoff:"),
-      resonaceLabel ( String::empty, "Resonace:")
+      resonaceLabel ( String::empty, "Resonace:"),
+      keytrackLabel ( String::empty, "Keytracking:")
 {
     // add some sliders..
     
@@ -77,7 +78,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     balanceSlider->setSliderStyle (Slider::Rotary);
     balanceSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, balanceSlider->getTextBoxHeight());
     
-    addAndMakeVisible (cutoffSlider = new ParameterSlider (*owner.cutoffParam));
+    addAndMakeVisible (cutoffSlider = new ParameterSlider (*owner.cutoffKnobParam));
     cutoffSlider->setSliderStyle (Slider::Rotary);
     cutoffSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, cutoffSlider->getTextBoxHeight());
     
@@ -85,6 +86,9 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     resonaceSlider->setSliderStyle (Slider::Rotary);
     resonaceSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
+    addAndMakeVisible (keytrackSlider = new ParameterSlider (*owner.keytrackParam));
+    keytrackSlider->setSliderStyle (Slider::Rotary);
+    keytrackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
     // add some labels for the sliders..
     
@@ -107,6 +111,10 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     resonaceLabel.attachToComponent(resonaceSlider, false);
     resonaceLabel.setFont (Font (11.0f));
     resonaceLabel.setJustificationType(Justification::centred);
+    
+    keytrackLabel.attachToComponent(keytrackSlider, false);
+    keytrackLabel.setFont (Font (11.0f));
+    keytrackLabel.setJustificationType(Justification::centred);
     
     // add the midi keyboard component..
     addAndMakeVisible (midiKeyboard);
@@ -156,6 +164,7 @@ void WavelandSynthAudioProcessorEditor::resized()
     balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 3)));
     cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 4)));
     resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 5)));
+    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 6)));
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     

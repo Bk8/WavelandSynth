@@ -97,8 +97,9 @@ public:
     AudioParameterFloat* bendAmountParam;
     AudioParameterFloat* detuneParam;
     AudioParameterFloat* balanceParam;
-    AudioParameterFloat* cutoffParam;
+    AudioParameterFloat* cutoffKnobParam;
     AudioParameterFloat* resonaceParam;
+    AudioParameterFloat* keytrackParam;
     
 
 private:
