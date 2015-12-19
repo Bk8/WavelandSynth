@@ -33,7 +33,8 @@ class SineWaveVoice  : public SynthesiserVoice
 {
 public:
     SineWaveVoice()
-    : angleDeltaOSC1 (0.0),
+    : twoPi(2.0 * float_Pi),
+      angleDeltaOSC1 (0.0),
       angleDeltaOSC2 (0.0),
       tailOff (0.0),
       sampleRate (SynthesiserVoice::getSampleRate()),
@@ -18535,7 +18536,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW200[indexIntPart +1] - SAW200[indexIntPart];
@@ -18549,7 +18550,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW100[indexIntPart +1] - SAW100[indexIntPart];
@@ -18563,7 +18564,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW50[indexIntPart +1] - SAW50[indexIntPart];
@@ -18577,7 +18578,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW24[indexIntPart +1] - SAW24[indexIntPart];
@@ -18591,7 +18592,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW12[indexIntPart +1] - SAW12[indexIntPart];
@@ -18605,7 +18606,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW6[indexIntPart +1] - SAW6[indexIntPart];
@@ -18619,7 +18620,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW4[indexIntPart +1] - SAW4[indexIntPart];
@@ -18633,7 +18634,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW2[indexIntPart +1] - SAW2[indexIntPart];
@@ -18647,7 +18648,7 @@ public:
         int indexIntPart;
         float indexDecimelPart;
         float difference;
-        index = (angle / (2 * float_Pi) * 2048);
+        index = (angle / twoPi * 2048);
         indexIntPart = static_cast<int>(index);
         indexDecimelPart = index - indexIntPart;
         difference = SAW1[indexIntPart +1] - SAW1[indexIntPart];
@@ -18799,8 +18800,8 @@ public:
         float cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
         float cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
         
-        angleDeltaOSC1 = cyclesPerSampleOSC1 * 2.0 * float_Pi;
-        angleDeltaOSC2 = cyclesPerSampleOSC2 * 2.0 * float_Pi;
+        angleDeltaOSC1 = cyclesPerSampleOSC1 * twoPi;
+        angleDeltaOSC2 = cyclesPerSampleOSC2 * twoPi;
         currentPitchInHertzOSC1 = float (cyclesPerSecondOCS1);
         currentPitchInHertzOSC2 = float (cyclesPerSecondOCS2);
     }
@@ -18810,8 +18811,8 @@ public:
                     int currentPitchWheelPosition) override
     {
         voiceCurentNote = midiNoteNumber;
-        float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
-        float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(2*float_Pi)));
+        float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
+        float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
         currentAngleOSC1 = startangleosc1;
         currentAngleOSC2 = startangleosc2;
         updateFilterParams();
@@ -18892,7 +18893,7 @@ public:
         
     }
     
-    float filterSound (float inputSample, float cutoffKnobPercent, float cutoffKeytrackPercent, float resonace)
+    float filterSound (float inputSample)
     {
         for (int i = 0; i < 4; i++)
             {
@@ -18941,20 +18942,20 @@ private:
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level * tailOff), cutoffKnob, cutoffKeytrack, resonace));
+                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * tailOff)));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
-                    if (currentAngleOSC1 >= 2 * float_Pi)
-                        currentAngleOSC1 -= 2 * float_Pi;
+                    if (currentAngleOSC1 >= twoPi)
+                        currentAngleOSC1 -= twoPi;
                     
                     currentAngleOSC2 += angleDeltaOSC2;
                     
-                    if (currentAngleOSC2 >= 2 * float_Pi)
-                        currentAngleOSC2 -= 2 * float_Pi;
+                    if (currentAngleOSC2 >= twoPi)
+                        currentAngleOSC2 -= twoPi;
                     
                     ++startSample;
                     
@@ -18975,27 +18976,27 @@ private:
             {
                 while (--numSamples >= 0)
                 {
-                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1 - balance)) * level, cutoffKnob, cutoffKeytrack, resonace));
+                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
-                    if (currentAngleOSC1 >= 2 * float_Pi)
-                        currentAngleOSC1 -= 2 * float_Pi;
+                    if (currentAngleOSC1 >= twoPi)
+                        currentAngleOSC1 -= twoPi;
                     
                     currentAngleOSC2 += angleDeltaOSC2;
                     
-                    if (currentAngleOSC2 >= 2 * float_Pi)
-                        currentAngleOSC2 -= 2 * float_Pi;
+                    if (currentAngleOSC2 >= twoPi)
+                        currentAngleOSC2 -= twoPi;
                     
                     ++startSample;
                 }
             }
         }
     }
-    
+    const float twoPi;
     float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
     float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
     float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace;
