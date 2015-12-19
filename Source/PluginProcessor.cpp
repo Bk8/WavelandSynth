@@ -13,7 +13,7 @@
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
-// comment
+
 //==============================================================================
 /** A demo synth sound that's just a basic sine wave.. */
 class SineWaveSound : public SynthesiserSound
