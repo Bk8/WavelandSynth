@@ -33,7 +33,7 @@ class SineWaveVoice  : public SynthesiserVoice
 {
 public:
     SineWaveVoice()
-    : twoPi(2.0 * float_Pi),
+    : twoPi (2.0 * float_Pi),
       angleDeltaOSC1 (0.0),
       angleDeltaOSC2 (0.0),
       tailOff (0.0),
