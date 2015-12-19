@@ -33,6 +33,7 @@ class SineWaveVoice  : public SynthesiserVoice
 {
 public:
     SineWaveVoice()
+    
     : angleDelta (0.0),
       tailOff (0.0),
       sampleRate (SynthesiserVoice::getSampleRate()),
