@@ -35,13 +35,13 @@ public:
     void processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages) override
     {
         jassert(! isUsingDoublePrecision());
-        process (buffer, midiMessages, delayBufferFloat);
+        process (buffer, midiMessages);
     }
     
     void processBlock (AudioBuffer<double>& buffer, MidiBuffer& midiMessages) override
     {
         jassert(! isUsingDoublePrecision());
-        process (buffer, midiMessages, delayBufferDouble);
+        process (buffer, midiMessages);
     }
     
     //==============================================================================
@@ -93,27 +93,20 @@ public:
     int lastUIWidth, lastUIHeight;
     
     // Our parameters
-    AudioParameterFloat* gainParam;
-    AudioParameterFloat* delayParam;
+
     AudioParameterFloat* bendAmountParam;
     AudioParameterFloat* detuneParam;
     AudioParameterFloat* balanceParam;
-    AudioParameterFloat* cutoffParam;
+    AudioParameterFloat* cutoffKnobParam;
     AudioParameterFloat* resonaceParam;
+    AudioParameterFloat* keytrackParam;
     
 
 private:
     //==============================================================================
     template <typename FloatType>
-    void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages, AudioBuffer<FloatType>& delaybuffer);
-    template <typename FloatType>
-    void applyGain (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
-    template <typename FloatType>
-    void applyDelay (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
+    void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages);
     
-    AudioBuffer<float> delayBufferFloat;
-    AudioBuffer<double> delayBufferDouble;
-    int delayPosition;
     
     Synthesiser synth;
     
