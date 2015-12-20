@@ -52,6 +52,8 @@ public:
     
     {
         srand (static_cast <unsigned> (time(0)));
+        volumeEnvelope.setSampleRate(sampleRate);
+        
     }
     
     float SAW200 [2049] =
@@ -18939,6 +18941,7 @@ private:
     template <typename FloatType>
     void processBlock (AudioBuffer<FloatType>& outputBuffer, int startSample, int numSamples)
     {
+        volumeEnvelope.renderEnvelope();
         if (angleDeltaOSC1 != 0.0 && angleDeltaOSC2 != 0.0)
         {
             if (tailOff > 0)
@@ -18946,7 +18949,7 @@ private:
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * tailOff)));
+                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * tailOff * volumeEnvelope.getenvelopeLevel())));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);
@@ -18980,7 +18983,7 @@ private:
             {
                 while (--numSamples >= 0)
                 {
-                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level));
+                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel()));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                         outputBuffer.addSample (i, startSample, currentSample);

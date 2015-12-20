@@ -13,10 +13,11 @@
 #include "Envelope.h"
 
 Envelope::Envelope ()
-    :   attack (0.0),
-        decay (0.0),
-        sustain (1.0),
-        release (0.0)
+    :   attack (0.01),
+        decay (0.01),
+        sustain (0.5),
+        release (0.01),
+        envelopeState (idleState)
     {
     }
 Envelope::~Envelope()
@@ -36,7 +37,7 @@ void Envelope::SetEnvelopeParams (float attackParam, float decayParam, float sus
     release = releaseParam;
 }
 
-Envelope::envState envelopeState = Envelope::idleState;
+//Envelope::envState envelopeState = Envelope::idleState;
     
 float Envelope::getAttack()
 {
@@ -75,34 +76,34 @@ void Envelope::endEnvelope()
     releasetick = 0;
 }
     
-float Envelope::renderEnvelope ()
+void Envelope::renderEnvelope ()
 {
-    float attackSlope = 1.0 / (attack * sampleRate * 2.0);
-    float decaySlope = (1.0 - sustain) / (decay * sampleRate * 2.0);
-    float releaseSlope = sustain / (release * sampleRate * 2.0);
+    double attackSlope = 1.0 / ((attack * sampleRate * 2.0) + 1.0);
+    double decaySlope = (1.0 - sustain) / ((decay * sampleRate * 2.0) + 1.0);
+    double releaseSlope = sustain / ((release * sampleRate * 2.0) + 1.0);
     
     
     switch (envelopeState)
     {
             
         case idleState:
-            envlopeTick = 0;
-            releasetick = 0;
-            return 0.0;
+            
+            envlopeTick = 0.0;
+            releasetick = 0.0;
+            envelopeLevel = 0.0;
             break;
             
         case attackState:
             
             envelopeLevel += attackSlope;
             
-            if (envlopeTick > attack * sampleRate * 10)
+            if (envelopeLevel >= 1.0)
             {
                 envelopeState = decayState;
             }
             
             envlopeTick ++;
             
-            return envelopeLevel;
             break;
             
         case decayState:
@@ -111,12 +112,11 @@ float Envelope::renderEnvelope ()
             
             if (envelopeLevel <= sustain)
             {
-                envelopeState = decayState;
+                envelopeState = sustainState;
             }
             
             envlopeTick ++;
             
-            return envelopeLevel;
             break;
             
         case sustainState:
@@ -125,7 +125,6 @@ float Envelope::renderEnvelope ()
             
             envlopeTick ++;
             
-            return envelopeLevel;
             break;
             
         case releaseState:
@@ -140,10 +139,9 @@ float Envelope::renderEnvelope ()
             envlopeTick ++;
             releasetick ++;
             
-            return envelopeLevel;
             break;
             
-        default: return 0.0;
+        default:
             break;
     }
 }

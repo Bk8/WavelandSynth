@@ -12,6 +12,7 @@
 #define ENVELOPE_H_INCLUDED
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "PluginProcessor.h"
 
 class Envelope
 {
@@ -46,11 +47,13 @@ public:
     
     void endEnvelope();
     
-    float renderEnvelope ();
+    void renderEnvelope ();
     
 private:
-    float sampleRate, attack, decay, sustain, release, envelopeLevel;
+    float sampleRate, attack, decay, sustain, release;
+    double envelopeLevel;
     int envlopeTick, releasetick;
+    envState envelopeState;
     
 };
 
