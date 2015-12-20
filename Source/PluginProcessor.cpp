@@ -52,8 +52,6 @@ public:
     
     {
         srand (static_cast <unsigned> (time(0)));
-        Envelope volumeEnvelope;
-        Envelope filterEnvelope;
     }
     
     float SAW200 [2049] =
@@ -18819,6 +18817,8 @@ public:
         currentAngleOSC1 = startangleosc1;
         currentAngleOSC2 = startangleosc2;
         updateFilterParams();
+        
+        volumeEnvelope.startEnvelope();
         level = velocity * 0.15;
         tailOff = 0.0;
         
@@ -18827,6 +18827,7 @@ public:
     
     void stopNote (float /*velocity*/, bool allowTailOff) override
     {
+        volumeEnvelope.endEnvelope();
         if (allowTailOff)
         {
             //
@@ -19006,7 +19007,8 @@ private:
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
-    
+    Envelope volumeEnvelope;
+    Envelope filterEnvelope;
 };
 
 
