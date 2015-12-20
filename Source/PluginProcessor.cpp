@@ -19005,6 +19005,142 @@ private:
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     
 };
+
+class Envelope  :public SineWaveVoice
+{
+public:
+    Envelope ()
+    :   attack (0.0),
+        decay (0.0),
+        sustain (1.0),
+        release (0.0)
+    
+    {
+    }
+    
+    ~Envelope(){}
+    
+    void SetEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam)
+    {
+        attack = attackParam;
+        decay = decayParam;
+        sustain = sustainParam;
+        release = releaseParam;
+    }
+    
+    enum envState
+    {
+        idleState,
+        attackState,
+        decayState,
+        sustainState,
+        releaseState
+    };
+    
+    envState envelopeState = idleState;
+    
+    float getAttack()
+    {
+        return attack;
+    }
+    
+    float getDecay()
+    {
+        return decay;
+    }
+    
+    float getSustain()
+    {
+        return sustain;
+    }
+    
+    float getRelease()
+    {
+        return release;
+    }
+    
+    float getenvelopeLevel()
+    {
+        return envelopeLevel;
+    }
+    
+    void startEnvelope()
+    {
+        envelopeState = attackState;
+    }
+    
+    void endEnvelope()
+    {
+        envelopeState = releaseState;
+    }
+    
+    float renderEnvelope ()
+    {
+        float sampleRate = SynthesiserVoice::getSampleRate();
+        float attackSlope = 1.0 / (attack * sampleRate * 10);
+        float decaySlope = (1.0 - sustain) / (decay * sampleRate * 10);
+        float releaseSlope = (1.0 - sustain) / (decay * sampleRate * 10);
+        
+        
+        switch (envelopeState) {
+                
+            case idleState:
+                envlopeTick = 0.0;
+                return 0.0;
+                break;
+                
+            case attackState:
+                
+                envelopeLevel = attackSlope * envlopeTick;
+                
+                envlopeTick ++;
+                
+                if (envlopeTick > attack * SynthesiserVoice::getSampleRate() * 10)
+                {
+                    envelopeState = decayState;
+                }
+                return envelopeLevel;
+                break;
+                
+            case decayState:
+                envlopeTick ++;
+                
+                if (envelopeLevel <= sustain)
+                {
+                    envelopeState = decayState;
+                }
+                return envelopeLevel;
+                break;
+            
+            case sustainState:
+                envlopeTick ++;
+                return envelopeLevel;
+                break;
+                
+            case releaseState:
+                envlopeTick ++;
+                
+                if (envelopeLevel <= 0.0)
+                {
+                    envelopeState = idleState;
+                }
+                
+                return envelopeLevel;
+                break;
+            
+            default: return 0.0;
+                break;
+        }
+    }
+    
+    
+    
+    void bullshitfunction() {;}
+    
+private:
+    float attack, decay, sustain, release, envelopeLevel, envlopeTick;
+    
+};
 //==============================================================================
 
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
@@ -19024,7 +19160,7 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(balanceParam = new AudioParameterFloat ("balance","Oscillator Balance", 0.0f, 1.0f, 0.5f));
     addParameter(cutoffKnobParam = new AudioParameterFloat ("cutoff", "Filter Cutoff", 0.0f, 1.0f, 0.5f));
     addParameter(resonaceParam = new AudioParameterFloat ("resonace", "Filter Resonace", 0.0f, 1.0f, 0.5f));
-    addParameter(keytrackParam = new AudioParameterFloat("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
+    addParameter(keytrackParam = new AudioParameterFloat ("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
 
     initialiseSynth();
 }
