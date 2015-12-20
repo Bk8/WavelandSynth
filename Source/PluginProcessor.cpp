@@ -26,7 +26,7 @@ public:
 };
 
 //==============================================================================
-/** A simple demo synth voice that just plays a sine wave.. */
+
 class SineWaveVoice  : public SynthesiserVoice
 
 
@@ -19006,6 +19006,7 @@ private:
     
 };
 
+
 class Envelope  :public SineWaveVoice
 {
 public:
@@ -19067,63 +19068,79 @@ public:
     void startEnvelope()
     {
         envelopeState = attackState;
+        envlopeTick = 0;
     }
     
     void endEnvelope()
     {
         envelopeState = releaseState;
+        releasetick = 0;
     }
     
     float renderEnvelope ()
     {
         float sampleRate = SynthesiserVoice::getSampleRate();
-        float attackSlope = 1.0 / (attack * sampleRate * 10);
-        float decaySlope = (1.0 - sustain) / (decay * sampleRate * 10);
-        float releaseSlope = (1.0 - sustain) / (decay * sampleRate * 10);
+        float attackSlope = 1.0 / (attack * sampleRate * 2.0);
+        float decaySlope = (1.0 - sustain) / (decay * sampleRate * 2.0);
+        float releaseSlope = sustain / (release * sampleRate * 2.0);
         
         
         switch (envelopeState) {
                 
             case idleState:
-                envlopeTick = 0.0;
+                envlopeTick = 0;
+                releasetick = 0;
                 return 0.0;
                 break;
                 
             case attackState:
                 
-                envelopeLevel = attackSlope * envlopeTick;
-                
-                envlopeTick ++;
+                envelopeLevel += attackSlope;
                 
                 if (envlopeTick > attack * SynthesiserVoice::getSampleRate() * 10)
                 {
                     envelopeState = decayState;
                 }
+                
+                envlopeTick ++;
+                
                 return envelopeLevel;
                 break;
                 
             case decayState:
-                envlopeTick ++;
+                
+                envelopeLevel -= decaySlope;
                 
                 if (envelopeLevel <= sustain)
                 {
                     envelopeState = decayState;
                 }
+                
+                envlopeTick ++;
+                
                 return envelopeLevel;
                 break;
             
             case sustainState:
+                
+                envelopeLevel = sustain;
+                
                 envlopeTick ++;
+                
                 return envelopeLevel;
                 break;
                 
             case releaseState:
-                envlopeTick ++;
+                
+                envelopeLevel -= releaseSlope;
                 
                 if (envelopeLevel <= 0.0)
                 {
                     envelopeState = idleState;
                 }
+                
+                envlopeTick ++;
+                releasetick ++;
                 
                 return envelopeLevel;
                 break;
@@ -19138,7 +19155,8 @@ public:
     void bullshitfunction() {;}
     
 private:
-    float attack, decay, sustain, release, envelopeLevel, envlopeTick;
+    float attack, decay, sustain, release, envelopeLevel;
+    int envlopeTick, releasetick;
     
 };
 //==============================================================================
