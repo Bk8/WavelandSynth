@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Envelope.h"
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
@@ -51,6 +52,8 @@ public:
     
     {
         srand (static_cast <unsigned> (time(0)));
+        Envelope volumeEnvelope;
+        Envelope filterEnvelope;
     }
     
     float SAW200 [2049] =
@@ -19007,158 +19010,6 @@ private:
 };
 
 
-class Envelope  :public SineWaveVoice
-{
-public:
-    Envelope ()
-    :   attack (0.0),
-        decay (0.0),
-        sustain (1.0),
-        release (0.0)
-    
-    {
-    }
-    
-    ~Envelope(){}
-    
-    void SetEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam)
-    {
-        attack = attackParam;
-        decay = decayParam;
-        sustain = sustainParam;
-        release = releaseParam;
-    }
-    
-    enum envState
-    {
-        idleState,
-        attackState,
-        decayState,
-        sustainState,
-        releaseState
-    };
-    
-    envState envelopeState = idleState;
-    
-    float getAttack()
-    {
-        return attack;
-    }
-    
-    float getDecay()
-    {
-        return decay;
-    }
-    
-    float getSustain()
-    {
-        return sustain;
-    }
-    
-    float getRelease()
-    {
-        return release;
-    }
-    
-    float getenvelopeLevel()
-    {
-        return envelopeLevel;
-    }
-    
-    void startEnvelope()
-    {
-        envelopeState = attackState;
-        envlopeTick = 0;
-    }
-    
-    void endEnvelope()
-    {
-        envelopeState = releaseState;
-        releasetick = 0;
-    }
-    
-    float renderEnvelope ()
-    {
-        float sampleRate = SynthesiserVoice::getSampleRate();
-        float attackSlope = 1.0 / (attack * sampleRate * 2.0);
-        float decaySlope = (1.0 - sustain) / (decay * sampleRate * 2.0);
-        float releaseSlope = sustain / (release * sampleRate * 2.0);
-        
-        
-        switch (envelopeState) {
-                
-            case idleState:
-                envlopeTick = 0;
-                releasetick = 0;
-                return 0.0;
-                break;
-                
-            case attackState:
-                
-                envelopeLevel += attackSlope;
-                
-                if (envlopeTick > attack * SynthesiserVoice::getSampleRate() * 10)
-                {
-                    envelopeState = decayState;
-                }
-                
-                envlopeTick ++;
-                
-                return envelopeLevel;
-                break;
-                
-            case decayState:
-                
-                envelopeLevel -= decaySlope;
-                
-                if (envelopeLevel <= sustain)
-                {
-                    envelopeState = decayState;
-                }
-                
-                envlopeTick ++;
-                
-                return envelopeLevel;
-                break;
-            
-            case sustainState:
-                
-                envelopeLevel = sustain;
-                
-                envlopeTick ++;
-                
-                return envelopeLevel;
-                break;
-                
-            case releaseState:
-                
-                envelopeLevel -= releaseSlope;
-                
-                if (envelopeLevel <= 0.0)
-                {
-                    envelopeState = idleState;
-                }
-                
-                envlopeTick ++;
-                releasetick ++;
-                
-                return envelopeLevel;
-                break;
-            
-            default: return 0.0;
-                break;
-        }
-    }
-    
-    
-    
-    void bullshitfunction() {;}
-    
-private:
-    float attack, decay, sustain, release, envelopeLevel;
-    int envlopeTick, releasetick;
-    
-};
 //==============================================================================
 
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()

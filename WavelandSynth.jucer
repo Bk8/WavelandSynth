@@ -12,6 +12,8 @@
               jucerVersion="4.1.0" pluginIsMidiEffectPlugin="0">
   <MAINGROUP id="q1WoGb" name="WavelandSynth">
     <GROUP id="{63611963-6FAB-EA92-3970-D080340149B3}" name="Source">
+      <FILE id="dQM06Y" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>
+      <FILE id="LNZaWS" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
       <FILE id="r2fwzP" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="jGIMk7" name="PluginProcessor.h" compile="0" resource="0"

@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Envelope.h"
 
 //==============================================================================
 // This is a handy slider subclass that controls an AudioProcessorParameter
@@ -70,11 +71,11 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     bendAmountSlider->setSliderStyle (Slider::Rotary);
     bendAmountSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, bendAmountSlider->getTextBoxHeight());
     
-    addAndMakeVisible(detuneSlider = new ParameterSlider(*owner.detuneParam));
+    addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.detuneParam));
     detuneSlider->setSliderStyle (Slider::Rotary);
     detuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, detuneSlider->getTextBoxHeight());
     
-    addAndMakeVisible(balanceSlider = new ParameterSlider(*owner.balanceParam));
+    addAndMakeVisible (balanceSlider = new ParameterSlider(*owner.balanceParam));
     balanceSlider->setSliderStyle (Slider::Rotary);
     balanceSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, balanceSlider->getTextBoxHeight());
     
