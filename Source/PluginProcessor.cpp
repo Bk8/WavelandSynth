@@ -18925,6 +18925,10 @@ public:
         return filter2Sum3;
     }
     
+    void setVolEnvelopeParams (float at, float de, float su, float re)
+    {
+        volumeEnvelope.setEnvelopeParams(at, de, su, re);
+    }
     
     void renderNextBlock (AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
     {
@@ -19023,7 +19027,7 @@ private:
 //==============================================================================
 
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
-    : lastUIWidth (800),
+    : lastUIWidth (600),
       lastUIHeight (400),
       bendAmountParam (nullptr),
       detuneParam(nullptr),
@@ -19065,6 +19069,7 @@ void WavelandSynthAudioProcessor::updateParameters()
             myVoice->setCutoffKnob (*cutoffKnobParam);
             myVoice->setResonance (*resonaceParam);
             myVoice->setKeytrack (*keytrackParam);
+            myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
             myVoice->updateFilterParams();
         }
     }
