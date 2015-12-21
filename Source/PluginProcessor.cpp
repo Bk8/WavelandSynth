@@ -18941,18 +18941,20 @@ private:
     template <typename FloatType>
     void processBlock (AudioBuffer<FloatType>& outputBuffer, int startSample, int numSamples)
     {
-        volumeEnvelope.renderEnvelope();
         if (angleDeltaOSC1 != 0.0 && angleDeltaOSC2 != 0.0)
         {
-            if (tailOff > 0)
+            if (volumeEnvelope.getEnvelopeState() == Envelope::releaseState)
             {
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * tailOff * volumeEnvelope.getenvelopeLevel())));
+                    static_cast<FloatType>( filterSound(((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel())));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
+                    {
                         outputBuffer.addSample (i, startSample, currentSample);
+                        volumeEnvelope.renderEnvelope();
+                    }
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -18966,10 +18968,10 @@ private:
                     
                     ++startSample;
                     
-                    tailOff *= 0.99;
                     
-                    if (tailOff <= 0.005)
+                    if (volumeEnvelope.getenvelopeLevel() <= 0.0)
                     {
+                        volumeEnvelope.setEnvelopeState(Envelope::idleState);
                         clearCurrentNote();
                         angleDeltaOSC1 = 0.0;
                         angleDeltaOSC2 = 0.0;
@@ -18986,7 +18988,10 @@ private:
                     const FloatType currentSample = static_cast<FloatType> (filterSound((sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel()));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
+                    {
                         outputBuffer.addSample (i, startSample, currentSample);
+                        volumeEnvelope.renderEnvelope();
+                    }
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -19019,13 +19024,17 @@ private:
 
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     : lastUIWidth (800),
-      lastUIHeight (200),
+      lastUIHeight (400),
       bendAmountParam (nullptr),
       detuneParam(nullptr),
       balanceParam(nullptr),
       cutoffKnobParam(nullptr),
       resonaceParam(nullptr),
-      keytrackParam(nullptr)
+      keytrackParam(nullptr),
+      volEnvAttParam(nullptr),
+      volEnvDecParam(nullptr),
+      volEnvSusParam(nullptr),
+      volEnvRelParam(nullptr)
 {
     lastPosInfo.resetToDefault();
 
@@ -19035,6 +19044,11 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(cutoffKnobParam = new AudioParameterFloat ("cutoff", "Filter Cutoff", 0.0f, 1.0f, 0.5f));
     addParameter(resonaceParam = new AudioParameterFloat ("resonace", "Filter Resonace", 0.0f, 1.0f, 0.5f));
     addParameter(keytrackParam = new AudioParameterFloat ("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
+    
+    addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.0f));
+    addParameter(volEnvDecParam = new AudioParameterFloat ("volDec", "Volume Decay", 0.0f, 1.0f, 0.0f));
+    addParameter(volEnvSusParam = new AudioParameterFloat ("volSus", "Volume Sustain", 0.0f, 1.0f, 1.0f));
+    addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.0f));
 
     initialiseSynth();
 }

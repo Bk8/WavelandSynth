@@ -22,7 +22,7 @@ public:
     
     void setSampleRate(float SRate);
     
-    void SetEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam);
+    void setEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam);
     
     enum envState
     {
@@ -32,6 +32,10 @@ public:
         sustainState,
         releaseState
     };
+    
+    envState getEnvelopeState();
+    
+    void setEnvelopeState( Envelope::envState newState);
     
     float getAttack();
     

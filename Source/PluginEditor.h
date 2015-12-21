@@ -35,7 +35,9 @@ private:
     
     MidiKeyboardComponent midiKeyboard;
     Label timecodeDisplayLabel, bendAmountLabel, detuneLabel, balanceLabel, cutoffLabel, resonaceLabel, keytrackLabel;
+    Label volAttackLabel, volDecayLabel, volSustainLabel, volReleaseLabel;
     ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider, keytrackSlider;
+    ScopedPointer<ParameterSlider> volAttackSlider, volDecaySlider, volSustainSlider, volReleaseSlider;
     ScopedPointer<ResizableCornerComponent> resizer;
     ComponentBoundsConstrainer resizeLimits;
     

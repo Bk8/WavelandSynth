@@ -13,10 +13,10 @@
 #include "Envelope.h"
 
 Envelope::Envelope ()
-    :   attack (0.01),
-        decay (0.01),
+    :   attack (1.0),
+        decay (0.5),
         sustain (0.5),
-        release (0.01),
+        release (1.0),
         envelopeState (idleState)
     {
     }
@@ -29,7 +29,7 @@ void Envelope::setSampleRate(float SRate)
     sampleRate = SRate;
 }
     
-void Envelope::SetEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam)
+void Envelope::setEnvelopeParams (float attackParam, float decayParam, float sustainParam, float releaseParam)
 {
     attack = attackParam;
     decay = decayParam;
@@ -37,7 +37,15 @@ void Envelope::SetEnvelopeParams (float attackParam, float decayParam, float sus
     release = releaseParam;
 }
 
-//Envelope::envState envelopeState = Envelope::idleState;
+Envelope::envState Envelope::getEnvelopeState()
+{
+    return envelopeState;
+}
+
+void Envelope::setEnvelopeState( Envelope::envState newState)
+{
+    envelopeState = newState;
+}
     
 float Envelope::getAttack()
 {
@@ -130,11 +138,6 @@ void Envelope::renderEnvelope ()
         case releaseState:
             
             envelopeLevel -= releaseSlope;
-            
-            if (envelopeLevel <= 0.0)
-            {
-                envelopeState = idleState;
-            }
             
             envlopeTick ++;
             releasetick ++;

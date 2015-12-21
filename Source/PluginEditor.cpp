@@ -63,7 +63,12 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       balanceLabel (String::empty, "OSC Balance:"),
       cutoffLabel (String::empty, "Cutoff:"),
       resonaceLabel ( String::empty, "Resonace:"),
-      keytrackLabel ( String::empty, "Keytracking:")
+      keytrackLabel ( String::empty, "Keytracking:"),
+
+      volAttackLabel ( String::empty, "Attack:"),
+      volDecayLabel ( String::empty, "Decay:"),
+      volSustainLabel ( String::empty, "Sustain:"),
+      volReleaseLabel ( String::empty, "Release:")
 {
     // add some sliders..
     
@@ -91,6 +96,24 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     keytrackSlider->setSliderStyle (Slider::Rotary);
     keytrackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
+    
+    
+    addAndMakeVisible (volAttackSlider = new ParameterSlider (*owner.volEnvAttParam));
+    volAttackSlider->setSliderStyle (Slider::Rotary);
+    volAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (volDecaySlider = new ParameterSlider (*owner.volEnvDecParam));
+    volDecaySlider->setSliderStyle (Slider::Rotary);
+    volDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (volSustainSlider = new ParameterSlider (*owner.volEnvSusParam));
+    volSustainSlider->setSliderStyle (Slider::Rotary);
+    volSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (volReleaseSlider = new ParameterSlider (*owner.volEnvRelParam));
+    volReleaseSlider->setSliderStyle (Slider::Rotary);
+    volReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
     // add some labels for the sliders..
     
     bendAmountLabel.attachToComponent(bendAmountSlider, false);
@@ -117,6 +140,23 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     keytrackLabel.setFont (Font (11.0f));
     keytrackLabel.setJustificationType(Justification::centred);
     
+    
+    volAttackLabel.attachToComponent(volAttackSlider, false);
+    volAttackLabel.setFont (Font (11.0f));
+    volAttackLabel.setJustificationType(Justification::centred);
+    
+    volDecayLabel.attachToComponent(volDecaySlider, false);
+    volDecayLabel.setFont (Font (11.0f));
+    volDecayLabel.setJustificationType(Justification::centred);
+    
+    volSustainLabel.attachToComponent(volSustainSlider, false);
+    volSustainLabel.setFont (Font (11.0f));
+    volSustainLabel.setJustificationType(Justification::centred);
+    
+    volReleaseLabel.attachToComponent(volReleaseSlider, false);
+    volReleaseLabel.setFont (Font (11.0f));
+    volReleaseLabel.setJustificationType(Justification::centred);
+    
     // add the midi keyboard component..
     addAndMakeVisible (midiKeyboard);
     
@@ -127,7 +167,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     // add the triangular resizer component for the bottom-right of the UI
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
-    resizeLimits.setSizeLimits (150, 150, 8000, 300);
+    resizeLimits.setSizeLimits (150, 150, 8000, 1000);
+
     
     // set our component's initial size to be the last one that was stored in the filter's settings
     setSize (owner.lastUIWidth,
@@ -166,6 +207,12 @@ void WavelandSynthAudioProcessorEditor::resized()
     cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (100, sliderArea.getWidth() / 8 * 4)));
     resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 5)));
     keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (100, sliderArea.getWidth() / 8 * 6)));
+    
+    Rectangle<int> volEnvSliderArea (r.removeFromTop (250));
+    volAttackSlider->setBounds (volEnvSliderArea.removeFromLeft (jmin (100, volEnvSliderArea.getWidth()/ 8 * 1)));
+    volDecaySlider->setBounds (volEnvSliderArea.removeFromLeft (jmin (100, volEnvSliderArea.getWidth()/ 8 * 2)));
+    volSustainSlider->setBounds (volEnvSliderArea.removeFromLeft (jmin (100, volEnvSliderArea.getWidth()/ 8 * 3)));
+    volReleaseSlider->setBounds (volEnvSliderArea.removeFromLeft (jmin (100, volEnvSliderArea.getWidth()/ 8 * 4)));
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     
