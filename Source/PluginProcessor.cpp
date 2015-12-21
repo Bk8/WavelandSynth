@@ -223,9 +223,9 @@ public:
         volumeEnvelope.setEnvelopeParams(at, de, su, re);
     }
     
-    void setfilEnvelopeParams (float at, float de, float su, float re)
+    void setfilEnvelopeParams (float fat, float fde, float fsu, float fre)
     {
-        filterEnvelope.setEnvelopeParams(at, de, su, re);
+        filterEnvelope.setEnvelopeParams(fat, fde, fsu, fre);
     }
     
     void renderNextBlock (AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
