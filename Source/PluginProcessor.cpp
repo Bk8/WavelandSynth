@@ -11,9 +11,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Envelope.h"
+#include <algorithm>
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
-
 
 //==============================================================================
 /** A demo synth sound that's just a basic sine wave.. */
@@ -37,12 +37,12 @@ public:
     : twoPi (2.0 * float_Pi),
       angleDeltaOSC1 (0.0),
       angleDeltaOSC2 (0.0),
-      tailOff (0.0),
       sampleRate (SynthesiserVoice::getSampleRate()),
       balance(0.5),
       cutoffKnob (0.5),
       cutoffKeytrack (1.0),
       resonace (0.5),
+      filterEnvAmt(1.0),
       filter1DelayTap1 (0.0),
       filter1DelayTap2 (0.0),
       filter1Sum3 (0.0),
@@ -53,6 +53,7 @@ public:
     {
         srand (static_cast <unsigned> (time(0)));
         volumeEnvelope.setSampleRate(sampleRate);
+        filterEnvelope.setSampleRate(sampleRate);
         
     }
     
@@ -18794,6 +18795,11 @@ public:
         cutoffKeytrack = keyParam;
     }
     
+    void SetFilterEnvAmt (float fltENVAmt)
+    {
+        filterEnvAmt = fltENVAmt;
+    }
+    
     void updateAngleDeltas (int currentNote, double pitchWheelAmount)
     {
         voiceCurentNote = currentNote + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount;
@@ -18821,8 +18827,8 @@ public:
         updateFilterParams();
         
         volumeEnvelope.startEnvelope();
-        level = velocity * 0.15;
-        tailOff = 0.0;
+        filterEnvelope.startEnvelope();
+        level = velocity * 0.10;
         
         updateAngleDeltas(midiNoteNumber, currentPitchWheelPosition);
     }
@@ -18830,24 +18836,7 @@ public:
     void stopNote (float /*velocity*/, bool allowTailOff) override
     {
         volumeEnvelope.endEnvelope();
-        if (allowTailOff)
-        {
-            //
-            //
-            
-            if (tailOff == 0.0)
-                
-                tailOff = 1.0;
-        }
-        else
-        {
-            
-            clearCurrentNote();
-            angleDeltaOSC1 = 0.0;
-            angleDeltaOSC2 = 0.0;
-            currentAngleOSC1 = 0.0;
-            currentAngleOSC2 = 0.0;
-        }
+        filterEnvelope.endEnvelope();
     }
     
     void pitchWheelMoved (int newValue) override
@@ -18884,17 +18873,24 @@ public:
     
     void updateFilterParams ()
     {
-        if (cutoffKnob != cutoffKnobPrev || cutoffKeytrack != cutoffKeytrackPrev || voiceCurentNote != voiceCurentNotePrev)
+        if (cutoffKnob != cutoffKnobPrev || cutoffKeytrack != cutoffKeytrackPrev || voiceCurentNote != voiceCurentNotePrev
+            || (float) filterEnvelope.getenvelopeLevel() != filterEnvPrev)
             {
                 float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
+                float cutoffFromENV = (135.0 - cutoffFromKeytrack) * filterEnvelope.getenvelopeLevel() * filterEnvAmt;
                 float cutoffFromKnob = (135.0 - cutoffFromKeytrack) * cutoffKnob;
-                float cutoffNote = cutoffFromKnob + cutoffFromKeytrack;
-                float cutoff = 440.0 * pow (2.0, (cutoffNote - 69.0) / 12.0) ;;
+                float cutoffNote = cutoffFromKnob + cutoffFromKeytrack + cutoffFromENV;
+                if (cutoffNote > 135)
+                {
+                    cutoffNote = 135;
+                }
+                float cutoff = 440.0 * pow (2.0, (cutoffNote - 69.0) / 12.0) ;
                 filterF = 2.0 * saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
             }
         cutoffKnobPrev = cutoffKnob * 1.0;
         cutoffKeytrackPrev = cutoffKeytrack * 1.0;
         voiceCurentNotePrev = voiceCurentNote * 1.0;
+        filterEnvPrev = (float) filterEnvelope.getenvelopeLevel();
         filterQ = 1.0 / resonace;
         
     }
@@ -18930,6 +18926,11 @@ public:
         volumeEnvelope.setEnvelopeParams(at, de, su, re);
     }
     
+    void setfilEnvelopeParams (float at, float de, float su, float re)
+    {
+        filterEnvelope.setEnvelopeParams(at, de, su, re);
+    }
+    
     void renderNextBlock (AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
     {
         processBlock (outputBuffer, startSample, numSamples);
@@ -18958,6 +18959,7 @@ private:
                     {
                         outputBuffer.addSample (i, startSample, currentSample);
                         volumeEnvelope.renderEnvelope();
+                        filterEnvelope.renderEnvelope();
                     }
                     
                     currentAngleOSC1 += angleDeltaOSC1;
@@ -18976,6 +18978,7 @@ private:
                     if (volumeEnvelope.getenvelopeLevel() <= 0.0)
                     {
                         volumeEnvelope.setEnvelopeState(Envelope::idleState);
+                        filterEnvelope.setEnvelopeState(Envelope::idleState);
                         clearCurrentNote();
                         angleDeltaOSC1 = 0.0;
                         angleDeltaOSC2 = 0.0;
@@ -18995,6 +18998,7 @@ private:
                     {
                         outputBuffer.addSample (i, startSample, currentSample);
                         volumeEnvelope.renderEnvelope();
+                        filterEnvelope.renderEnvelope();
                     }
                     
                     currentAngleOSC1 += angleDeltaOSC1;
@@ -19013,9 +19017,9 @@ private:
         }
     }
     const float twoPi;
-    float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, tailOff, sampleRate;
+    float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, sampleRate;
     float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
-    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace;
+    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace, filterEnvAmt, filterEnvPrev;
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
@@ -19035,10 +19039,17 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
       cutoffKnobParam(nullptr),
       resonaceParam(nullptr),
       keytrackParam(nullptr),
+      filEnvAmtParam(nullptr),
+
       volEnvAttParam(nullptr),
       volEnvDecParam(nullptr),
       volEnvSusParam(nullptr),
-      volEnvRelParam(nullptr)
+      volEnvRelParam(nullptr),
+
+      filEnvAttParam(nullptr),
+      filEnvDecParam(nullptr),
+      filEnvSusParam(nullptr),
+      filEnvRelParam(nullptr)
 {
     lastPosInfo.resetToDefault();
 
@@ -19048,11 +19059,17 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(cutoffKnobParam = new AudioParameterFloat ("cutoff", "Filter Cutoff", 0.0f, 1.0f, 0.5f));
     addParameter(resonaceParam = new AudioParameterFloat ("resonace", "Filter Resonace", 0.0f, 1.0f, 0.5f));
     addParameter(keytrackParam = new AudioParameterFloat ("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
+    addParameter(filEnvAmtParam = new AudioParameterFloat ("filtEnvAmt", "Filter Env Amt", 0.0f, 1.0f, 0.0f));
     
     addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvDecParam = new AudioParameterFloat ("volDec", "Volume Decay", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvSusParam = new AudioParameterFloat ("volSus", "Volume Sustain", 0.0f, 1.0f, 1.0f));
     addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.0f));
+    
+    addParameter(filEnvAttParam = new AudioParameterFloat ("filAtt", "Filter Attack", 0.0f, 1.0f, 0.0f));
+    addParameter(filEnvDecParam = new AudioParameterFloat ("filDec", "Filter Decay", 0.0f, 1.0f, 0.0f));
+    addParameter(filEnvSusParam = new AudioParameterFloat ("filSus", "Filter Sustain", 0.0f, 1.0f, 1.0f));
+    addParameter(filEnvRelParam = new AudioParameterFloat ("filRel", "Filter Release", 0.0f, 1.0f, 0.0f));
 
     initialiseSynth();
 }
@@ -19069,7 +19086,9 @@ void WavelandSynthAudioProcessor::updateParameters()
             myVoice->setCutoffKnob (*cutoffKnobParam);
             myVoice->setResonance (*resonaceParam);
             myVoice->setKeytrack (*keytrackParam);
+            myVoice->SetFilterEnvAmt (*filEnvAmtParam);
             myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
+            myVoice->setfilEnvelopeParams (*filEnvAttParam, *filEnvDecParam, *filEnvSusParam, *filEnvRelParam);
             myVoice->updateFilterParams();
         }
     }
@@ -19098,6 +19117,9 @@ void WavelandSynthAudioProcessor::initialiseSynth()
                 myVoice->setCutoffKnob (*cutoffKnobParam);
                 myVoice->setResonance (*resonaceParam);
                 myVoice->setKeytrack (*keytrackParam);
+                myVoice->SetFilterEnvAmt (*filEnvAmtParam);
+                myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
+                myVoice->setfilEnvelopeParams (*filEnvAttParam, *filEnvDecParam, *filEnvSusParam, *filEnvRelParam);
                 myVoice->innitFilter();
             }
     }

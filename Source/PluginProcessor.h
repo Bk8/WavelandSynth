@@ -100,11 +100,17 @@ public:
     AudioParameterFloat* cutoffKnobParam;
     AudioParameterFloat* resonaceParam;
     AudioParameterFloat* keytrackParam;
+    AudioParameterFloat* filEnvAmtParam;
+    
     AudioParameterFloat* volEnvAttParam;
     AudioParameterFloat* volEnvDecParam;
     AudioParameterFloat* volEnvSusParam;
     AudioParameterFloat* volEnvRelParam;
     
+    AudioParameterFloat* filEnvAttParam;
+    AudioParameterFloat* filEnvDecParam;
+    AudioParameterFloat* filEnvSusParam;
+    AudioParameterFloat* filEnvRelParam;
     
 
 private:

@@ -64,11 +64,17 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       cutoffLabel (String::empty, "Cutoff:"),
       resonaceLabel ( String::empty, "Resonace:"),
       keytrackLabel ( String::empty, "Keytracking:"),
+      filEnvAmtLabel (String::empty, "Filter EnvAmt:"),
 
       volAttackLabel ( String::empty, "Attack:"),
       volDecayLabel ( String::empty, "Decay:"),
       volSustainLabel ( String::empty, "Sustain:"),
-      volReleaseLabel ( String::empty, "Release:")
+      volReleaseLabel ( String::empty, "Release:"),
+
+      filAttackLabel ( String::empty, "FAttack:"),
+      filDecayLabel ( String::empty, "FDecay:"),
+      filSustainLabel ( String::empty, "FSustain:"),
+      filReleaseLabel ( String::empty, "FRelease:")
 {
     // add some sliders..
     
@@ -96,6 +102,10 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     keytrackSlider->setSliderStyle (Slider::Rotary);
     keytrackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
+    addAndMakeVisible (filEnvAmtSlider = new ParameterSlider (*owner.filEnvAmtParam));
+    filEnvAmtSlider->setSliderStyle (Slider::Rotary);
+    filEnvAmtSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filEnvAmtSlider->getTextBoxHeight());
+    
     
     
     addAndMakeVisible (volAttackSlider = new ParameterSlider (*owner.volEnvAttParam));
@@ -113,6 +123,24 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     addAndMakeVisible (volReleaseSlider = new ParameterSlider (*owner.volEnvRelParam));
     volReleaseSlider->setSliderStyle (Slider::Rotary);
     volReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    
+    
+    addAndMakeVisible (filAttackSlider = new ParameterSlider (*owner.filEnvAttParam));
+    filAttackSlider->setSliderStyle (Slider::Rotary);
+    filAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (filDecaySlider = new ParameterSlider (*owner.filEnvDecParam));
+    filDecaySlider->setSliderStyle (Slider::Rotary);
+    filDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (filSustainSlider = new ParameterSlider (*owner.filEnvSusParam));
+    filSustainSlider->setSliderStyle (Slider::Rotary);
+    filSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (filReleaseSlider = new ParameterSlider (*owner.filEnvRelParam));
+    filReleaseSlider->setSliderStyle (Slider::Rotary);
+    filReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
     // add some labels for the sliders..
     
@@ -140,6 +168,10 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     keytrackLabel.setFont (Font (11.0f));
     keytrackLabel.setJustificationType(Justification::centredTop);
     
+    filEnvAmtLabel.attachToComponent(filEnvAmtSlider, false);
+    filEnvAmtLabel.setFont (Font (11.0f));
+    filEnvAmtLabel.setJustificationType(Justification::centredTop);
+    
     
     volAttackLabel.attachToComponent(volAttackSlider, false);
     volAttackLabel.setFont (Font (11.0f));
@@ -156,6 +188,23 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     volReleaseLabel.attachToComponent(volReleaseSlider, false);
     volReleaseLabel.setFont (Font (11.0f));
     volReleaseLabel.setJustificationType(Justification::centredTop);
+    
+    
+    filAttackLabel.attachToComponent(filAttackSlider, false);
+    filAttackLabel.setFont (Font (11.0f));
+    filAttackLabel.setJustificationType(Justification::centredTop);
+    
+    filDecayLabel.attachToComponent(filDecaySlider, false);
+    filDecayLabel.setFont (Font (11.0f));
+    filDecayLabel.setJustificationType(Justification::centredTop);
+    
+    filSustainLabel.attachToComponent(filSustainSlider, false);
+    filSustainLabel.setFont (Font (11.0f));
+    filSustainLabel.setJustificationType(Justification::centredTop);
+    
+    filReleaseLabel.attachToComponent(filReleaseSlider, false);
+    filReleaseLabel.setFont (Font (11.0f));
+    filReleaseLabel.setJustificationType(Justification::centredTop);
     
     // add the midi keyboard component..
     addAndMakeVisible (midiKeyboard);
@@ -221,6 +270,9 @@ void WavelandSynthAudioProcessorEditor::resized()
     keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (50, sliderArea.getWidth() / 8 * 6)));
     keytrackSlider->setSize(sliderXY, sliderXY);
     
+    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (50, sliderArea.getWidth() / 8 * 7)));
+    filEnvAmtSlider->setSize(sliderXY, sliderXY);
+    
     Rectangle<int> sliderRow2;
     sliderRow2.setBounds(r.getX() + 8 , r.getY() + 150, r.getWidth() - 16, r.getHeight() /4);
     volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 1)));
@@ -234,6 +286,20 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 4)));
     volReleaseSlider->setSize(sliderXY, sliderXY);
+    
+    
+    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 5)));
+    filAttackSlider->setSize(sliderXY, sliderXY);
+    
+    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 6)));
+    filDecaySlider->setSize(sliderXY, sliderXY);
+    
+    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 7)));
+    filSustainSlider->setSize(sliderXY, sliderXY);
+    
+    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 8)));
+    filReleaseSlider->setSize(sliderXY, sliderXY);
+
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     

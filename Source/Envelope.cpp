@@ -13,10 +13,10 @@
 #include "Envelope.h"
 
 Envelope::Envelope ()
-    :   attack (1.0),
-        decay (0.5),
-        sustain (0.5),
-        release (1.0),
+    :   attack (0.0),
+        decay (0.0),
+        sustain (1.0),
+        release (0.0),
         envelopeState (idleState)
     {
     }
