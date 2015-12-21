@@ -128,26 +128,15 @@ public:
         return SAW2[indexIntPart] + (difference * indexDecimelPart);
     }
     
-    inline float saw1ofAngle (float angle)
-    {
-        float index;
-        int indexIntPart;
-        float indexDecimelPart;
-        float difference;
-        index = (angle / twoPi * 2048);
-        indexIntPart = static_cast<int>(index);
-        indexDecimelPart = index - indexIntPart;
-        difference = SAW1[indexIntPart +1] - SAW1[indexIntPart];
-        
-        return SAW1[indexIntPart] + (difference * indexDecimelPart);
-    }
+    float saw1ofAngle (float angle);
     
     
     float sawOfAngle (float angle, int pitchInHertz);
     
     private:
     
-    const float twoPi = 2 * double_Pi;
+    const float twoPi = 2 * float_Pi;
+    
     
     float SAW200 [2049] =
     {

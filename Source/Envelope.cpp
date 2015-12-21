@@ -108,6 +108,7 @@ void Envelope::renderEnvelope ()
             if (envelopeLevel >= 1.0)
             {
                 envelopeState = decayState;
+                envelopeLevel = 1.0;
             }
             
             envlopeTick ++;
@@ -115,17 +116,18 @@ void Envelope::renderEnvelope ()
             break;
             
         case decayState:
-                
-            envelopeLevel -= decaySlope;
             
             if (envelopeLevel <= sustain)
             {
                 envelopeState = sustainState;
+                envelopeLevel = sustain;
+                break;
             }
-            
-            envlopeTick ++;
-            
-            break;
+            else
+            {
+                envelopeLevel -= decaySlope;
+                break;
+            }
             
         case sustainState:
             
@@ -138,6 +140,11 @@ void Envelope::renderEnvelope ()
         case releaseState:
             
             envelopeLevel -= releaseSlope;
+            
+            if (envelopeLevel < 0.0)
+            {
+                envelopeLevel = 0.0;
+            }
             
             envlopeTick ++;
             releasetick ++;

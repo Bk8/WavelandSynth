@@ -77,3 +77,17 @@ float Saw::sawOfAngle (float angle, int pitchInHertz)
     }
     //return saw200ofAngle(angle);
 }
+
+float Saw::saw1ofAngle (float angle)
+{
+    float index;
+    int indexIntPart;
+    float indexDecimelPart;
+    float difference;
+    index = (angle / twoPi * 2048);
+    indexIntPart = static_cast<int>(index);
+    indexDecimelPart = index - indexIntPart;
+    difference = SAW1[indexIntPart +1] - SAW1[indexIntPart];
+    
+    return SAW1[indexIntPart] + (difference * indexDecimelPart);
+}
