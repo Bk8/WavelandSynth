@@ -11,7 +11,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Envelope.h"
-#include <algorithm>
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
