@@ -105,8 +105,8 @@ public:
         
         voiceCurentNote = currentNote + (currentBend - 8192.0) / 8192.0 * bendAmount + (sawer.saw1ofAngle(lfoCurrentAngle) * modWheel);
         
-        float cyclesPerSecondOCS1 = 440.0 * pow (2.0, (voiceCurentNote + detune - 69.0) / 12.0) ;
-        float cyclesPerSecondOCS2 = 440.0 * pow (2.0, (voiceCurentNote - detune - 69.0) / 12.0) ;
+        float cyclesPerSecondOCS1 = sawer.mtf(voiceCurentNote + detune);
+        float cyclesPerSecondOCS2 = sawer.mtf(voiceCurentNote - detune);
         float cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
         float cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
         
@@ -192,7 +192,7 @@ public:
                 {
                     cutoffNote = 135;
                 }
-                float cutoff = 440.0 * pow (2.0, (cutoffNote - 69.0) / 12.0) ;
+                float cutoff = sawer.mtf(cutoffNote);
                 filterF = 2.0 * sawer.saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
             }
         cutoffKnobPrev = cutoffKnob * 1.0;
@@ -288,7 +288,6 @@ private:
                     
                     ++startSample;
                     
-                    
                     if (volumeEnvelope.getenvelopeLevel() <= 0.0)
                     {
                         volumeEnvelope.setEnvelopeState(Envelope::idleState);
@@ -298,6 +297,7 @@ private:
                         angleDeltaOSC2 = 0.0;
                         currentAngleOSC1 = 0.0;
                         currentAngleOSC2 = 0.0;
+                        modWheel = 0.0;
                         break;
                     }
                 }

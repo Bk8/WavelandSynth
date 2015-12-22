@@ -91,3 +91,17 @@ float Saw::saw1ofAngle (float angle)
     
     return SAW1[indexIntPart] + (difference * indexDecimelPart);
 }
+
+float Saw::mtf(float notenumber)
+{
+    float index;
+    int indexIntPart;
+    float indexDecimelPart;
+    float difference;
+    index = notenumber;
+    indexIntPart = static_cast<int>(index);
+    indexDecimelPart = index - indexIntPart;
+    difference = MTF[indexIntPart +1] - MTF[indexIntPart];
+    
+    return MTF[indexIntPart] + (difference * indexDecimelPart);
+}
