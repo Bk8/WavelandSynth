@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file has the audio processor and VirtualAnalogVoice
+    This file has the AudiPprocessor and VirtualAnalogVoice
 
   ==============================================================================
 */
