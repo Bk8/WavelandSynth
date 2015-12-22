@@ -112,7 +112,7 @@ void Envelope::renderEnvelope ()
                 envelopeLevel = 1.0;
             }
             
-            envlopeTick ++;
+            ++envlopeTick;
             
             break;
             
@@ -134,7 +134,7 @@ void Envelope::renderEnvelope ()
             
             envelopeLevel = sustain;
             
-            envlopeTick ++;
+            ++envlopeTick;
             
             break;
             
@@ -147,8 +147,8 @@ void Envelope::renderEnvelope ()
                 envelopeLevel = 0.0;
             }
             
-            envlopeTick ++;
-            releasetick ++;
+            ++envlopeTick;
+            ++releasetick;
             
             break;
             

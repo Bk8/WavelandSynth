@@ -185,7 +185,6 @@ public:
             {
                 float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
                 float cutoffFromENV = (135.0 - cutoffFromKeytrack) * filterEnvelope.getenvelopeLevel() * filterEnvAmt;
-                //std::cout << filterEnvelope.getenvelopeLevel()<<"  "<<filterEnvelope.getEnvelopeState()<<std::endl;
                 float cutoffFromKnob = (135.0 - cutoffFromKeytrack) * cutoffKnob;
                 float cutoffNote = cutoffFromKnob + cutoffFromKeytrack + cutoffFromENV;
                 if (cutoffNote > 135)
@@ -205,7 +204,7 @@ public:
     
     float filterSound (float inputSample)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; ++i)
             {
                 filter1Sum1 = inputSample - filter1Product2 - filter1Sum3;
                 filter1Product1 = filterF * filter1Sum1;
