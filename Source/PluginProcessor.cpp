@@ -46,7 +46,11 @@ public:
       filter2DelayTap1 (0.0),
       filter2DelayTap2 (0.0),
       filter2Sum3 (0.0),
-      currentBend (0.0)
+      currentBend (0.0),
+      currentNote (0.0),
+      modWheel (0.0),
+      lfoCurrentAngle (0.0),
+      lfoAngleDelta (0.0)
     
     {
         srand (static_cast <unsigned> (time(0)));
@@ -95,9 +99,11 @@ public:
         filterEnvAmt = fltENVAmt;
     }
     
-    void updateAngleDeltas (int currentNote, double pitchWheelAmount)
+    void updateAngleDeltas ()
     {
-        voiceCurentNote = currentNote + (pitchWheelAmount - 8192.0) / 8192.0 * bendAmount;
+        lfoAngleDelta = (6.0 * twoPi/sampleRate);
+        
+        voiceCurentNote = currentNote + (currentBend - 8192.0) / 8192.0 * bendAmount + (sawer.saw1ofAngle(lfoCurrentAngle) * modWheel);
         
         float cyclesPerSecondOCS1 = 440.0 * pow (2.0, (voiceCurentNote + detune - 69.0) / 12.0) ;
         float cyclesPerSecondOCS2 = 440.0 * pow (2.0, (voiceCurentNote - detune - 69.0) / 12.0) ;
@@ -114,7 +120,7 @@ public:
                     SynthesiserSound* /*sound*/,
                     int currentPitchWheelPosition) override
     {
-        voiceCurentNote = midiNoteNumber;
+        currentNote = midiNoteNumber;
         float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
         float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
         currentAngleOSC1 = startangleosc1;
@@ -125,7 +131,7 @@ public:
         filterEnvelope.startEnvelope();
         level = velocity * 0.10;
         
-        updateAngleDeltas(midiNoteNumber, currentPitchWheelPosition);
+        updateAngleDeltas();
     }
     
     void stopNote (float /*velocity*/, bool allowTailOff) override
@@ -139,14 +145,16 @@ public:
     
     void pitchWheelMoved (int newValue) override
     {
-        //updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), newValue);
         currentBend = newValue;
         updateFilterParams();
     }
     
-    void controllerMoved (int /*controllerNumber*/, int /*newValue*/) override
+    void controllerMoved (int controllerNumber, int newValue) override
     {
-        // not implemented for the purposes of this demo!
+        if (controllerNumber == 1)
+        {
+            modWheel = (float) newValue/ 127.0 * 0.5;
+        }
     }
     
     void innitFilter ()
@@ -261,7 +269,7 @@ private:
                         volumeEnvelope.renderEnvelope();
                         filterEnvelope.renderEnvelope();
                     }
-                    updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), currentBend);
+                    updateAngleDeltas();
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -272,6 +280,11 @@ private:
                     
                     if (currentAngleOSC2 >= twoPi)
                         currentAngleOSC2 -= twoPi;
+                    
+                    lfoCurrentAngle += lfoAngleDelta;
+                    
+                    if (lfoCurrentAngle >= twoPi)
+                        lfoCurrentAngle -= twoPi;
                     
                     ++startSample;
                     
@@ -301,7 +314,7 @@ private:
                         volumeEnvelope.renderEnvelope();
                         filterEnvelope.renderEnvelope();
                     }
-                    updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), currentBend);
+                    updateAngleDeltas();
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -312,6 +325,11 @@ private:
                     
                     if (currentAngleOSC2 >= twoPi)
                         currentAngleOSC2 -= twoPi;
+                    
+                    lfoCurrentAngle += lfoAngleDelta;
+                    
+                    if (lfoCurrentAngle >= twoPi)
+                        lfoCurrentAngle -= twoPi;
                     
                     ++startSample;
                 }
@@ -325,7 +343,7 @@ private:
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
-    float currentBend;
+    float currentBend, currentNote, modWheel, lfoCurrentAngle, lfoAngleDelta;
     Envelope volumeEnvelope;
     Envelope filterEnvelope;
     Saw sawer;
@@ -368,12 +386,12 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvDecParam = new AudioParameterFloat ("volDec", "Volume Decay", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvSusParam = new AudioParameterFloat ("volSus", "Volume Sustain", 0.0f, 1.0f, 1.0f));
-    addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.0f));
+    addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.01f));
     
     addParameter(filEnvAttParam = new AudioParameterFloat ("filAtt", "Filter Attack", 0.0f, 1.0f, 0.0f));
     addParameter(filEnvDecParam = new AudioParameterFloat ("filDec", "Filter Decay", 0.0f, 1.0f, 0.0f));
     addParameter(filEnvSusParam = new AudioParameterFloat ("filSus", "Filter Sustain", 0.0f, 1.0f, 1.0f));
-    addParameter(filEnvRelParam = new AudioParameterFloat ("filRel", "Filter Release", 0.0f, 1.0f, 0.0f));
+    addParameter(filEnvRelParam = new AudioParameterFloat ("filRel", "Filter Release", 0.0f, 1.0f, 0.01f));
 
     initialiseSynth();
 }

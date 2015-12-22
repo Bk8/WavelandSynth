@@ -58,7 +58,8 @@ private:
     double envelopeLevel;
     int envlopeTick, releasetick;
     envState envelopeState;
-    
+
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Envelope);
 };
 
 

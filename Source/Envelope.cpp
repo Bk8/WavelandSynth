@@ -17,6 +17,7 @@ Envelope::Envelope ()
         decay (0.0),
         sustain (1.0),
         release (0.0),
+        envelopeLevel(0.0),
         envelopeState (idleState)
     {
     }

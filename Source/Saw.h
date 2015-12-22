@@ -16,6 +16,8 @@
 class Saw
 {
 public:
+    Saw(){};
+    ~Saw(){};
     inline float saw200ofAngle (float angle)
     {
         float index;
@@ -18613,6 +18615,6 @@ public:
         0.003068,
         0
     };
-    
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Saw);
 };
 #endif  // SAW_H_INCLUDED
