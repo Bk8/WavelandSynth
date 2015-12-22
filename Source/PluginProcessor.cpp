@@ -45,7 +45,8 @@ public:
       filter1Sum3 (0.0),
       filter2DelayTap1 (0.0),
       filter2DelayTap2 (0.0),
-      filter2Sum3 (0.0)
+      filter2Sum3 (0.0),
+      currentBend (0.0)
     
     {
         srand (static_cast <unsigned> (time(0)));
@@ -138,7 +139,8 @@ public:
     
     void pitchWheelMoved (int newValue) override
     {
-        updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), newValue);
+        //updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), newValue);
+        currentBend = newValue;
         updateFilterParams();
     }
     
@@ -259,6 +261,7 @@ private:
                         volumeEnvelope.renderEnvelope();
                         filterEnvelope.renderEnvelope();
                     }
+                    updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), currentBend);
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -298,6 +301,7 @@ private:
                         volumeEnvelope.renderEnvelope();
                         filterEnvelope.renderEnvelope();
                     }
+                    updateAngleDeltas(SynthesiserVoice::getCurrentlyPlayingNote(), currentBend);
                     
                     currentAngleOSC1 += angleDeltaOSC1;
                     
@@ -321,6 +325,7 @@ private:
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
+    float currentBend;
     Envelope volumeEnvelope;
     Envelope filterEnvelope;
     Saw sawer;
