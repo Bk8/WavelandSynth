@@ -65,6 +65,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       resonaceLabel ( String::empty, "Resonace:"),
       keytrackLabel ( String::empty, "Keytracking:"),
       filEnvAmtLabel (String::empty, "Filter EnvAmt:"),
+      lfoRateLabel (String::empty, "Lfo Rate:"),
+      vibratoAmtLabel (String::empty, "Vibrato Amt:"),
 
       volAttackLabel ( String::empty, "Attack:"),
       volDecayLabel ( String::empty, "Decay:"),
@@ -106,41 +108,48 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     filEnvAmtSlider->setSliderStyle (Slider::Rotary);
     filEnvAmtSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filEnvAmtSlider->getTextBoxHeight());
     
+    addAndMakeVisible (lfoRateSlider = new ParameterSlider (*owner.lfoRateParam));
+    lfoRateSlider->setSliderStyle (Slider::Rotary);
+    lfoRateSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, lfoRateSlider->getTextBoxHeight());
+    
+    addAndMakeVisible (vibratoAmtSlider = new ParameterSlider (*owner.vibratoAmtParam));
+    vibratoAmtSlider->setSliderStyle (Slider::Rotary);
+    vibratoAmtSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, vibratoAmtSlider->getTextBoxHeight());
     
     
     addAndMakeVisible (volAttackSlider = new ParameterSlider (*owner.volEnvAttParam));
     volAttackSlider->setSliderStyle (Slider::Rotary);
-    volAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    volAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volAttackSlider->getTextBoxHeight());
     
     addAndMakeVisible (volDecaySlider = new ParameterSlider (*owner.volEnvDecParam));
     volDecaySlider->setSliderStyle (Slider::Rotary);
-    volDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    volDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volDecaySlider->getTextBoxHeight());
     
     addAndMakeVisible (volSustainSlider = new ParameterSlider (*owner.volEnvSusParam));
     volSustainSlider->setSliderStyle (Slider::Rotary);
-    volSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    volSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volSustainSlider->getTextBoxHeight());
     
     addAndMakeVisible (volReleaseSlider = new ParameterSlider (*owner.volEnvRelParam));
     volReleaseSlider->setSliderStyle (Slider::Rotary);
-    volReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    volReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volReleaseSlider->getTextBoxHeight());
     
     
     
     addAndMakeVisible (filAttackSlider = new ParameterSlider (*owner.filEnvAttParam));
     filAttackSlider->setSliderStyle (Slider::Rotary);
-    filAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    filAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filAttackSlider->getTextBoxHeight());
     
     addAndMakeVisible (filDecaySlider = new ParameterSlider (*owner.filEnvDecParam));
     filDecaySlider->setSliderStyle (Slider::Rotary);
-    filDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    filDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filDecaySlider->getTextBoxHeight());
     
     addAndMakeVisible (filSustainSlider = new ParameterSlider (*owner.filEnvSusParam));
     filSustainSlider->setSliderStyle (Slider::Rotary);
-    filSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    filSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filSustainSlider->getTextBoxHeight());
     
     addAndMakeVisible (filReleaseSlider = new ParameterSlider (*owner.filEnvRelParam));
     filReleaseSlider->setSliderStyle (Slider::Rotary);
-    filReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
+    filReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filReleaseSlider->getTextBoxHeight());
     
     // add some labels for the sliders..
     
@@ -171,6 +180,14 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     filEnvAmtLabel.attachToComponent(filEnvAmtSlider, false);
     filEnvAmtLabel.setFont (Font (11.0f));
     filEnvAmtLabel.setJustificationType(Justification::centredTop);
+    
+    lfoRateLabel.attachToComponent(lfoRateSlider, false);
+    lfoRateLabel.setFont (Font (11.0f));
+    lfoRateLabel.setJustificationType(Justification::centredTop);
+    
+    vibratoAmtLabel.attachToComponent(vibratoAmtSlider, false);
+    vibratoAmtLabel.setFont (Font (11.0f));
+    vibratoAmtLabel.setJustificationType(Justification::centredTop);
     
     
     volAttackLabel.attachToComponent(volAttackSlider, false);
@@ -216,7 +233,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     // add the triangular resizer component for the bottom-right of the UI
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
-    resizeLimits.setSizeLimits (600, 400, 2000, 1000);
+    resizeLimits.setSizeLimits (400, 400, 2000, 1000);
  
     
     // set our component's initial size to be the last one that was stored in the filter's settings
@@ -248,58 +265,68 @@ void WavelandSynthAudioProcessorEditor::resized()
     timecodeDisplayLabel.setBounds (r.removeFromTop (26));
     midiKeyboard.setBounds (r.removeFromBottom (70));
     int sliderXY = 50;
+    int defaultsliderDistance = 60;
+    int divider = 10;
     
     r.removeFromTop (30);
     Rectangle<int> sliderArea;
     sliderArea.setBounds(r.getX() + 8, r.getY() + 26, r.getWidth() - 16, (r.getHeight() - 100) / 4);
-    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmin (50, sliderArea.getWidth()/ 8 * 1)));
+    
+    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth()/ divider * 1)));
     bendAmountSlider->setSize(sliderXY, sliderXY);
     
-    detuneSlider->setBounds (sliderArea.removeFromLeft (jmin (50, sliderArea.getWidth() / 8 * 2)));
+    detuneSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 2)));
     detuneSlider->setSize(sliderXY, sliderXY);
     
-    balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (50, sliderArea.getWidth() / 8 * 3)));
+    balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 3)));
     balanceSlider->setSize(sliderXY, sliderXY);
     
-    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (50, sliderArea.getWidth() / 8 * 4)));
+    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 4)));
     cutoffSlider->setSize(sliderXY, sliderXY);
     
-    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (50, sliderArea.getWidth() / 8 * 5)));
+    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 5)));
     resonaceSlider->setSize(sliderXY, sliderXY);
     
-    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (50, sliderArea.getWidth() / 8 * 6)));
+    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 6)));
     keytrackSlider->setSize(sliderXY, sliderXY);
     
-    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (50, sliderArea.getWidth() / 8 * 7)));
+    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 7)));
     filEnvAmtSlider->setSize(sliderXY, sliderXY);
+    
+    lfoRateSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 8)));
+    lfoRateSlider->setSize(sliderXY, sliderXY);
+    
+    vibratoAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 9)));
+    vibratoAmtSlider->setSize(sliderXY, sliderXY);
+    
     
     Rectangle<int> sliderRow2;
     sliderRow2.setBounds(r.getX() + 8 , r.getY() + 150, r.getWidth() - 16, r.getHeight() /4);
-    volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 1)));
+    
+    volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 1)));
     volAttackSlider->setSize(sliderXY, sliderXY);
     
-    volDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 2)));
+    volDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 2)));
     volDecaySlider->setSize(sliderXY, sliderXY);
     
-    volSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 3)));
+    volSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 3)));
     volSustainSlider->setSize(sliderXY, sliderXY);
     
-    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 4)));
+    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 4)));
     volReleaseSlider->setSize(sliderXY, sliderXY);
     
-    
-    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 5)));
+    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 5)));
     filAttackSlider->setSize(sliderXY, sliderXY);
     
-    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 6)));
+    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 6)));
     filDecaySlider->setSize(sliderXY, sliderXY);
     
-    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 7)));
+    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 7)));
     filSustainSlider->setSize(sliderXY, sliderXY);
     
-    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (50, sliderRow2.getWidth()/ 8 * 8)));
+    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 8)));
     filReleaseSlider->setSize(sliderXY, sliderXY);
-
+    
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     

@@ -34,13 +34,19 @@ private:
     class ParameterSlider;
     
     MidiKeyboardComponent midiKeyboard;
-    Label timecodeDisplayLabel, bendAmountLabel, detuneLabel, balanceLabel, cutoffLabel, resonaceLabel, keytrackLabel, filEnvAmtLabel;
+    
+    Label timecodeDisplayLabel, bendAmountLabel, detuneLabel, balanceLabel, cutoffLabel, resonaceLabel,
+        keytrackLabel, filEnvAmtLabel, lfoRateLabel, vibratoAmtLabel;
+    
     Label volAttackLabel, volDecayLabel, volSustainLabel, volReleaseLabel;
     Label filAttackLabel, filDecayLabel, filSustainLabel, filReleaseLabel;
     
-    ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider, keytrackSlider, filEnvAmtSlider;
+    ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider,
+        keytrackSlider, filEnvAmtSlider,lfoRateSlider, vibratoAmtSlider;
+    
     ScopedPointer<ParameterSlider> volAttackSlider, volDecaySlider, volSustainSlider, volReleaseSlider;
     ScopedPointer<ParameterSlider> filAttackSlider, filDecaySlider, filSustainSlider, filReleaseSlider;
+    
     ScopedPointer<ResizableCornerComponent> resizer;
     ComponentBoundsConstrainer resizeLimits;
     

@@ -101,6 +101,8 @@ public:
     AudioParameterFloat* resonaceParam;
     AudioParameterFloat* keytrackParam;
     AudioParameterFloat* filEnvAmtParam;
+    AudioParameterFloat* lfoRateParam;
+    AudioParameterFloat* vibratoAmtParam;
     
     AudioParameterFloat* volEnvAttParam;
     AudioParameterFloat* volEnvDecParam;

@@ -40,6 +40,8 @@ public:
       cutoffKeytrack (1.0),
       resonace (0.5),
       filterEnvAmt(1.0),
+      lfoRate (0.0),
+      vibratoAmount (0.0),
       filter1DelayTap1 (0.0),
       filter1DelayTap2 (0.0),
       filter1Sum3 (0.0),
@@ -94,14 +96,26 @@ public:
         cutoffKeytrack = keyParam;
     }
     
-    void SetFilterEnvAmt (float fltENVAmt)
+    void SetFilterEnvAmt (float fltENVAmtParam)
     {
-        filterEnvAmt = fltENVAmt;
+        filterEnvAmt = fltENVAmtParam;
     }
+    
+    void SetLfoRate (float lfoRateParam)
+    {
+        lfoRate = lfoRateParam * 10.0;
+    }
+    
+    void SetVibratoAmt (float vibratoAmtParam)
+    {
+        vibratoAmount = vibratoAmtParam;
+    }
+    
+    
     
     void updateAngleDeltas ()
     {
-        lfoAngleDelta = (6.0 * twoPi/sampleRate);
+        lfoAngleDelta = (lfoRate * twoPi/sampleRate);
         
         voiceCurentNote = currentNote + (currentBend - 8192.0) / 8192.0 * bendAmount + (sawer.saw1ofAngle(lfoCurrentAngle) * modWheel);
         
@@ -153,7 +167,7 @@ public:
     {
         if (controllerNumber == 1)
         {
-            modWheel = (float) newValue/ 127.0 * 0.5;
+            modWheel = (float) newValue/ 127.0 * vibratoAmount;
         }
     }
     
@@ -180,7 +194,9 @@ public:
     
     void updateFilterParams ()
     {
-        if (cutoffKnob != cutoffKnobPrev || cutoffKeytrack != cutoffKeytrackPrev || voiceCurentNote != voiceCurentNotePrev
+        if (cutoffKnob != cutoffKnobPrev
+            || cutoffKeytrack != cutoffKeytrackPrev
+            || voiceCurentNote != voiceCurentNotePrev
             || (float) filterEnvelope.getenvelopeLevel() != filterEnvPrev)
             {
                 float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
@@ -338,14 +354,15 @@ private:
     const float twoPi = 2 * float_Pi;
     float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, sampleRate;
     float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
-    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, cutoffKnobPrev, cutoffKeytrackPrev, resonace, filterEnvAmt, filterEnvPrev;
+    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, resonace, filterEnvAmt, lfoRate, vibratoAmount;
+    float cutoffKnobPrev, cutoffKeytrackPrev, filterEnvPrev;
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     float currentBend, currentNote, modWheel, lfoCurrentAngle, lfoAngleDelta;
-    Envelope volumeEnvelope;
-    Envelope filterEnvelope;
-    Saw sawer;
+    Envelope volumeEnvelope {};
+    Envelope filterEnvelope {};
+    Saw sawer {};
 };
 
 
@@ -361,6 +378,8 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
       resonaceParam(nullptr),
       keytrackParam(nullptr),
       filEnvAmtParam(nullptr),
+      lfoRateParam(nullptr),
+      vibratoAmtParam(nullptr),
 
       volEnvAttParam(nullptr),
       volEnvDecParam(nullptr),
@@ -381,6 +400,8 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(resonaceParam = new AudioParameterFloat ("resonace", "Filter Resonace", 0.0f, 1.0f, 0.5f));
     addParameter(keytrackParam = new AudioParameterFloat ("keytracking", "Filter Keytracking", 0.0f, 1.0f, 1.0f));
     addParameter(filEnvAmtParam = new AudioParameterFloat ("filtEnvAmt", "Filter Env Amt", 0.0f, 1.0f, 0.0f));
+    addParameter(lfoRateParam = new AudioParameterFloat ("lfoRate", "Lfo Rate", 0.0f, 1.0f, 0.6f));
+    addParameter(vibratoAmtParam = new AudioParameterFloat ("vibratoAmt", "Vibrato Amount", 0.0f, 1.0f, 0.5f));
     
     addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvDecParam = new AudioParameterFloat ("volDec", "Volume Decay", 0.0f, 1.0f, 0.0f));
@@ -408,6 +429,8 @@ void WavelandSynthAudioProcessor::updateParameters()
             myVoice->setResonance (*resonaceParam);
             myVoice->setKeytrack (*keytrackParam);
             myVoice->SetFilterEnvAmt (*filEnvAmtParam);
+            myVoice->SetLfoRate(*lfoRateParam);
+            myVoice->SetVibratoAmt(*vibratoAmtParam);
             myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
             myVoice->setfilEnvelopeParams (*filEnvAttParam, *filEnvDecParam, *filEnvSusParam, *filEnvRelParam);
             myVoice->updateFilterParams();
