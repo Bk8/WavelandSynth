@@ -25,6 +25,9 @@ public:
         setRange (0.0, 1.0, 0.0);
         startTimerHz (30);
         updateSliderPos();
+        Slider::setSliderStyle(Slider::Rotary);
+        Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 50, this->getTextBoxHeight());
+        
     }
     
     void valueChanged() override
@@ -46,6 +49,13 @@ public:
         
         if (newValue != (float) Slider::getValue())
             Slider::setValue (newValue);
+    }
+    
+    void makeParamSlider (ScopedPointer<ParameterSlider> newSlider, AudioProcessorParameter& param)
+    {
+        addAndMakeVisible(newSlider = new ParameterSlider (param));
+        newSlider->setSliderStyle (Slider::Rotary);
+        newSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, newSlider->getTextBoxHeight());
     }
     
     AudioProcessorParameter& param;
@@ -78,80 +88,45 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       filSustainLabel ( String::empty, "FSustain:"),
       filReleaseLabel ( String::empty, "FRelease:")
 {
-    // add some sliders..
+    // add some sliders...
     
     addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
-    bendAmountSlider->setSliderStyle (Slider::Rotary);
-    bendAmountSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, bendAmountSlider->getTextBoxHeight());
     
     addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.detuneParam));
-    detuneSlider->setSliderStyle (Slider::Rotary);
-    detuneSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, detuneSlider->getTextBoxHeight());
     
     addAndMakeVisible (balanceSlider = new ParameterSlider(*owner.balanceParam));
-    balanceSlider->setSliderStyle (Slider::Rotary);
-    balanceSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, balanceSlider->getTextBoxHeight());
     
     addAndMakeVisible (cutoffSlider = new ParameterSlider (*owner.cutoffKnobParam));
-    cutoffSlider->setSliderStyle (Slider::Rotary);
-    cutoffSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, cutoffSlider->getTextBoxHeight());
     
     addAndMakeVisible (resonaceSlider = new ParameterSlider (*owner.resonaceParam));
-    resonaceSlider->setSliderStyle (Slider::Rotary);
-    resonaceSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
     addAndMakeVisible (keytrackSlider = new ParameterSlider (*owner.keytrackParam));
-    keytrackSlider->setSliderStyle (Slider::Rotary);
-    keytrackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, resonaceSlider->getTextBoxHeight());
     
     addAndMakeVisible (filEnvAmtSlider = new ParameterSlider (*owner.filEnvAmtParam));
-    filEnvAmtSlider->setSliderStyle (Slider::Rotary);
-    filEnvAmtSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filEnvAmtSlider->getTextBoxHeight());
     
     addAndMakeVisible (lfoRateSlider = new ParameterSlider (*owner.lfoRateParam));
-    lfoRateSlider->setSliderStyle (Slider::Rotary);
-    lfoRateSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, lfoRateSlider->getTextBoxHeight());
     
     addAndMakeVisible (vibratoAmtSlider = new ParameterSlider (*owner.vibratoAmtParam));
-    vibratoAmtSlider->setSliderStyle (Slider::Rotary);
-    vibratoAmtSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, vibratoAmtSlider->getTextBoxHeight());
     
     
     addAndMakeVisible (volAttackSlider = new ParameterSlider (*owner.volEnvAttParam));
-    volAttackSlider->setSliderStyle (Slider::Rotary);
-    volAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volAttackSlider->getTextBoxHeight());
     
     addAndMakeVisible (volDecaySlider = new ParameterSlider (*owner.volEnvDecParam));
-    volDecaySlider->setSliderStyle (Slider::Rotary);
-    volDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volDecaySlider->getTextBoxHeight());
-    
+
     addAndMakeVisible (volSustainSlider = new ParameterSlider (*owner.volEnvSusParam));
-    volSustainSlider->setSliderStyle (Slider::Rotary);
-    volSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volSustainSlider->getTextBoxHeight());
-    
+
     addAndMakeVisible (volReleaseSlider = new ParameterSlider (*owner.volEnvRelParam));
-    volReleaseSlider->setSliderStyle (Slider::Rotary);
-    volReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, volReleaseSlider->getTextBoxHeight());
-    
     
     
     addAndMakeVisible (filAttackSlider = new ParameterSlider (*owner.filEnvAttParam));
-    filAttackSlider->setSliderStyle (Slider::Rotary);
-    filAttackSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filAttackSlider->getTextBoxHeight());
-    
+
     addAndMakeVisible (filDecaySlider = new ParameterSlider (*owner.filEnvDecParam));
-    filDecaySlider->setSliderStyle (Slider::Rotary);
-    filDecaySlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filDecaySlider->getTextBoxHeight());
-    
+
     addAndMakeVisible (filSustainSlider = new ParameterSlider (*owner.filEnvSusParam));
-    filSustainSlider->setSliderStyle (Slider::Rotary);
-    filSustainSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filSustainSlider->getTextBoxHeight());
-    
+
     addAndMakeVisible (filReleaseSlider = new ParameterSlider (*owner.filEnvRelParam));
-    filReleaseSlider->setSliderStyle (Slider::Rotary);
-    filReleaseSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, filReleaseSlider->getTextBoxHeight());
-    
-    // add some labels for the sliders..
+
+    // add some labels for the sliders...
     
     bendAmountLabel.attachToComponent(bendAmountSlider, false);
     bendAmountLabel.setFont (Font (11.0f));
@@ -249,6 +224,9 @@ WavelandSynthAudioProcessorEditor::~WavelandSynthAudioProcessorEditor()
 }
 
 //==============================================================================
+//void WavelandSynthAudioProcessorEditor::setupLabel(Label& labelToUse, juce::Component *sliderToUse);
+
+
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
 {
     g.setGradientFill (ColourGradient (Colours::darkgrey, 0, 0,
@@ -332,7 +310,6 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     getProcessor().lastUIWidth = getWidth();
     getProcessor().lastUIHeight = getHeight();
-    //std::cout << sliderRow2.getX() << "   "<< sliderArea.getX() << std::endl;
 }
 
 //==============================================================================
