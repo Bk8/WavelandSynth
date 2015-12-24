@@ -66,6 +66,11 @@ public:
         return dynamic_cast<VitualAnalogSound*> (sound) != nullptr;
     }
     
+    bool isVoiceActive() const override
+    {
+        return VAvoiceIsAcitve;
+    }
+    
     void setCutoffKnob (float cutParam)
     {
         cutoffKnob = cutParam;
@@ -110,11 +115,6 @@ public:
     {
         vibratoAmount = vibratoAmtParam;
     }
-    
-    //bool isVoiceActive() const override
-    //{
-    //    return VAvoiceIsAcitve;
-    //}
     
     void updateAngleDeltas ()
     {
