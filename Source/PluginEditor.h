@@ -23,7 +23,6 @@ private Timer
 {
 public:
     WavelandSynthAudioProcessorEditor (WavelandSynthAudioProcessor&);
-    WavelandSynthAudioProcessorEditor ();
     ~WavelandSynthAudioProcessorEditor();
     
     //==============================================================================
