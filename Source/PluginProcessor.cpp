@@ -111,7 +111,10 @@ public:
         vibratoAmount = vibratoAmtParam;
     }
     
-    
+    bool isVoiceActive()
+    {
+        return VAvoiceIsAcitve;
+    }
     
     void updateAngleDeltas ()
     {
@@ -134,7 +137,16 @@ public:
                     SynthesiserSound* /*sound*/,
                     int currentPitchWheelPosition) override
     {
+
+        VAvoiceIsAcitve = true;
+        
         currentNote = midiNoteNumber;
+        
+        if (currentPitchWheelPosition <= 16383 && currentPitchWheelPosition >= 0)
+        {
+            currentBend = static_cast<float>(currentPitchWheelPosition) ;
+        }
+        
         float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
         float startangleosc2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
         currentAngleOSC1 = startangleosc1;
@@ -159,7 +171,7 @@ public:
     
     void pitchWheelMoved (int newValue) override
     {
-        currentBend = newValue;
+        currentBend = static_cast<float>( newValue);
         updateFilterParams();
     }
     
@@ -313,6 +325,7 @@ private:
                         currentAngleOSC1 = 0.0;
                         currentAngleOSC2 = 0.0;
                         modWheel = 0.0;
+                        VAvoiceIsAcitve = false;
                         break;
                     }
                 }
@@ -360,6 +373,7 @@ private:
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
     float filter2DelayTap1, filter2DelayTap2, filter2Sum1, filter2Sum2, filter2Sum3, filter2Product1, filter2Product2, filter2Product3;
     float currentBend, currentNote, modWheel, lfoCurrentAngle, lfoAngleDelta;
+    bool VAvoiceIsAcitve;
     Envelope volumeEnvelope {};
     Envelope filterEnvelope {};
     Saw sawer {};
@@ -501,7 +515,6 @@ void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
                                            MidiBuffer &midiMessages)
 {
     const int numSamples = buffer.getNumSamples();
-    
    
     keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
     
@@ -511,7 +524,8 @@ void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
 
     for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
         buffer.clear (i, 0, numSamples);
- 
+    
+    
     updateCurrentTimeInfoFromHost();
 }
 
