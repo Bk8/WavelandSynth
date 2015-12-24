@@ -9,7 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Envelope.h"
-#include "Saw.h"
+#include "Wavetable.h"
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
@@ -111,19 +111,19 @@ public:
         vibratoAmount = vibratoAmtParam;
     }
     
-    bool isVoiceActive() const override
-    {
-        return VAvoiceIsAcitve;
-    }
+    //bool isVoiceActive() const override
+    //{
+    //    return VAvoiceIsAcitve;
+    //}
     
     void updateAngleDeltas ()
     {
         lfoAngleDelta = (lfoRate * twoPi/sampleRate);
         
-        voiceCurentNote = currentNote + (currentBend - 8192.0) / 8192.0 * bendAmount + (sawer.saw1ofAngle(lfoCurrentAngle) * modWheel);
+        voiceCurentNote = currentNote + currentBend * bendAmount + (wavetableMath.saw1ofAngle(lfoCurrentAngle) * modWheel);
         
-        float cyclesPerSecondOCS1 = sawer.mtf(voiceCurentNote + detune);
-        float cyclesPerSecondOCS2 = sawer.mtf(voiceCurentNote - detune);
+        float cyclesPerSecondOCS1 = wavetableMath.mtf(voiceCurentNote + detune);
+        float cyclesPerSecondOCS2 = wavetableMath.mtf(voiceCurentNote - detune);
         float cyclesPerSampleOSC1 = cyclesPerSecondOCS1 / sampleRate;
         float cyclesPerSampleOSC2 = cyclesPerSecondOCS2 / sampleRate;
         
@@ -144,7 +144,7 @@ public:
         
         if (currentPitchWheelPosition <= 16383 && currentPitchWheelPosition >= 0)
         {
-            currentBend = static_cast<float>(currentPitchWheelPosition) ;
+            currentBend = (currentPitchWheelPosition - 8192.0)/8192.0;
         }
         
         float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
@@ -171,7 +171,7 @@ public:
     
     void pitchWheelMoved (int newValue) override
     {
-        currentBend = static_cast<float>( newValue);
+        currentBend = (newValue - 8192.0) / 8192.0;
         updateFilterParams();
     }
     
@@ -219,8 +219,8 @@ public:
                 {
                     cutoffNote = 135;
                 }
-                float cutoff = sawer.mtf(cutoffNote);
-                filterF = 2.0 * sawer.saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
+                float cutoff = wavetableMath.mtf(cutoffNote);
+                filterF = 2.0 * wavetableMath.saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
             }
         cutoffKnobPrev = cutoffKnob * 1.0;
         cutoffKeytrackPrev = cutoffKeytrack * 1.0;
@@ -288,7 +288,7 @@ private:
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((sawer.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawer.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel())));
+                    static_cast<FloatType>( filterSound(((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel())));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     {
@@ -334,7 +334,7 @@ private:
             {
                 while (--numSamples >= 0)
                 {
-                    const FloatType currentSample = static_cast<FloatType> (filterSound((sawer.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + sawer.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel()));
+                    const FloatType currentSample = static_cast<FloatType> (filterSound((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel()));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     {
@@ -376,7 +376,7 @@ private:
     bool VAvoiceIsAcitve;
     Envelope volumeEnvelope {};
     Envelope filterEnvelope {};
-    Saw sawer {};
+    Wavetable wavetableMath {};
 };
 
 
