@@ -111,7 +111,7 @@ public:
         vibratoAmount = vibratoAmtParam;
     }
     
-    bool isVoiceActive()
+    bool isVoiceActive() const override
     {
         return VAvoiceIsAcitve;
     }
