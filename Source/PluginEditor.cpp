@@ -27,7 +27,8 @@ public:
         updateSliderPos();
         Slider::setSliderStyle(Slider::Rotary);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 50, this->getTextBoxHeight());
-        
+        Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::darkgrey);
+        Slider::setSize(50, 50);
     }
     
     void valueChanged() override
@@ -91,6 +92,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     // add some sliders...
     
     addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
+    //bendAmountSlider->setColour(juce::Slider::rotarySliderFillColourId, Colours::darkgrey);
     
     addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.detuneParam));
     
@@ -203,7 +205,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     // add a label that will display the current timecode and status..
     addAndMakeVisible (timecodeDisplayLabel);
-    timecodeDisplayLabel.setColour (Label::textColourId, Colours::blue);
+    timecodeDisplayLabel.setColour (Label::textColourId, Colours::darkgrey);
     timecodeDisplayLabel.setFont (Font (Font::getDefaultMonospacedFontName(), 15.0f, Font::plain));
     
     // add the triangular resizer component for the bottom-right of the UI
@@ -229,8 +231,8 @@ WavelandSynthAudioProcessorEditor::~WavelandSynthAudioProcessorEditor()
 
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
 {
-    g.setGradientFill (ColourGradient (Colours::darkgrey, 0, 0,
-                                       Colours::lightgrey, 0, (float) getHeight(), false));
+    g.setGradientFill (ColourGradient (Colours::lightgrey, 0, 0,
+                                       Colours::grey, 0, (float) getHeight(), false));
     g.fillAll();
 }
 
