@@ -383,7 +383,7 @@ private:
 //==============================================================================
 
 WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
-    : lastUIWidth (600),
+    : lastUIWidth (632),
       lastUIHeight (400),
       bendAmountParam (nullptr),
       detuneParam(nullptr),

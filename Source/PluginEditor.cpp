@@ -55,7 +55,7 @@ public:
     void makeParamSlider (ScopedPointer<ParameterSlider> newSlider, AudioProcessorParameter& param)
     {
         addAndMakeVisible(newSlider = new ParameterSlider (param));
-        newSlider->setSliderStyle (Slider::Rotary);
+        //newSlider->setSliderStyle (Slider::Rotary);
         newSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, newSlider->getTextBoxHeight());
     }
     
@@ -92,7 +92,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     // add some sliders...
     
     addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
-    //bendAmountSlider->setColour(juce::Slider::rotarySliderFillColourId, Colours::darkgrey);
     
     addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.detuneParam));
     
