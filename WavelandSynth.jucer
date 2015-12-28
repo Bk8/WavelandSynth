@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.6"
+<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.7"
               bundleIdentifier="com.Snowland.WavelandSynth" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="WavelandSynth" pluginDesc="WavelandSynth" pluginManufacturer="Snowland"

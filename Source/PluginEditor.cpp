@@ -129,41 +129,41 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
 
     // add some labels for the sliders...
     
-    setupLabel(bendAmountLabel, bendAmountSlider);
+    setupLabel (bendAmountLabel, bendAmountSlider);
     
-    setupLabel(detuneLabel, detuneSlider);
+    setupLabel (detuneLabel, detuneSlider);
     
-    setupLabel(balanceLabel, balanceSlider);
+    setupLabel (balanceLabel, balanceSlider);
     
-    setupLabel(cutoffLabel, cutoffSlider);
+    setupLabel (cutoffLabel, cutoffSlider);
     
-    setupLabel(resonaceLabel, resonaceSlider);
+    setupLabel (resonaceLabel, resonaceSlider);
     
-    setupLabel(keytrackLabel, keytrackSlider);
+    setupLabel (keytrackLabel, keytrackSlider);
     
-    setupLabel(filEnvAmtLabel, filEnvAmtSlider);
+    setupLabel (filEnvAmtLabel, filEnvAmtSlider);
     
-    setupLabel(lfoRateLabel, lfoRateSlider);
+    setupLabel (lfoRateLabel, lfoRateSlider);
     
-    setupLabel(vibratoAmtLabel, vibratoAmtSlider);
-    
-    
-    setupLabel(volAttackLabel, volAttackSlider);
-    
-    setupLabel(volDecayLabel, volDecaySlider);
-    
-    setupLabel(volSustainLabel, volSustainSlider);
-    
-    setupLabel(volReleaseLabel, volReleaseSlider);
+    setupLabel (vibratoAmtLabel, vibratoAmtSlider);
     
     
-    setupLabel(filAttackLabel, filAttackSlider);
+    setupLabel (volAttackLabel, volAttackSlider);
     
-    setupLabel(filDecayLabel, filDecaySlider);
+    setupLabel (volDecayLabel, volDecaySlider);
     
-    setupLabel(filSustainLabel, filSustainSlider);
+    setupLabel (volSustainLabel, volSustainSlider);
     
-    setupLabel(filReleaseLabel, filReleaseSlider);
+    setupLabel (volReleaseLabel, volReleaseSlider);
+    
+    
+    setupLabel (filAttackLabel, filAttackSlider);
+    
+    setupLabel (filDecayLabel, filDecaySlider);
+    
+    setupLabel (filSustainLabel, filSustainSlider);
+    
+    setupLabel (filReleaseLabel, filReleaseSlider);
     
     
     // add the midi keyboard component..
@@ -197,7 +197,10 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
 {
     addAndMakeVisible(labelToUse);
     labelToUse.attachToComponent(sliderToUse, false);
-    labelToUse.setFont(Font (11.0f));
+    labelToUse.setFont(Font (Font::getDefaultSansSerifFontName(), 15.0f, Font::plain));
+    labelToUse.setSize(100, 20);
+    //labelToUse.setColour(Label::backgroundColourId, juce::Colours::red);
+    labelToUse.setColour(Label::textColourId, juce::Colours::blue);
     labelToUse.setJustificationType(Justification::centredTop);
 }
 
@@ -216,69 +219,69 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     timecodeDisplayLabel.setBounds (r.removeFromTop (26));
     midiKeyboard.setBounds (r.removeFromBottom (70));
-    int sliderXY = 50;
     int sliderMinDistance = 60;
     int divider = 9;
     
     r.removeFromTop (30);
     Rectangle<int> sliderArea;
     sliderArea.setBounds(r.getX() + 8, r.getY() + 26, r.getWidth() - 16, (r.getHeight() - 100) / 4);
-    int distanceBetween {sliderArea.getWidth()/divider};
-    
-    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    bendAmountSlider->setSize(sliderXY, sliderXY);
-    
-    detuneSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    detuneSlider->setSize(sliderXY, sliderXY);
-    
-    balanceSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    balanceSlider->setSize(sliderXY, sliderXY);
-    
-    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    cutoffSlider->setSize(sliderXY, sliderXY);
-    
-    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
-    resonaceSlider->setSize(sliderXY, sliderXY);
-    
-    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
-    keytrackSlider->setSize(sliderXY, sliderXY);
-    
-    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
-    filEnvAmtSlider->setSize(sliderXY, sliderXY);
-    
-    lfoRateSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
-    lfoRateSlider->setSize(sliderXY, sliderXY);
-    
-    vibratoAmtSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
-    vibratoAmtSlider->setSize(sliderXY, sliderXY);
-    
-    
     Rectangle<int> sliderRow2;
     sliderRow2.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 2, r.getWidth() - 16, r.getHeight() /4);
     
-    volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    volAttackSlider->setSize(sliderXY, sliderXY);
+    int distanceBetween {jmax (sliderArea.getWidth()/divider, sliderMinDistance)};
+    int rowDistance {jmax (sliderRow2.getHeight(), sliderMinDistance)};
     
-    volDecaySlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    volDecaySlider->setSize(sliderXY, sliderXY);
+    bendAmountSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    bendAmountSlider->setSize (distanceBetween, rowDistance);
     
-    volSustainSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    volSustainSlider->setSize(sliderXY, sliderXY);
+    detuneSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    detuneSlider->setSize (distanceBetween, rowDistance);
     
-    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    volReleaseSlider->setSize(sliderXY, sliderXY);
+    balanceSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    balanceSlider->setSize (distanceBetween, rowDistance);
     
-    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    filAttackSlider->setSize(sliderXY, sliderXY);
+    cutoffSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    cutoffSlider->setSize (distanceBetween, rowDistance);
     
-    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    filDecaySlider->setSize(sliderXY, sliderXY);
+    resonaceSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    resonaceSlider->setSize (distanceBetween, rowDistance);
     
-    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    filSustainSlider->setSize(sliderXY, sliderXY);
+    keytrackSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    keytrackSlider->setSize (distanceBetween, rowDistance);
     
-    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
-    filReleaseSlider->setSize(sliderXY, sliderXY);
+    filEnvAmtSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    filEnvAmtSlider->setSize (distanceBetween, rowDistance);
+    
+    lfoRateSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    lfoRateSlider->setSize (distanceBetween, rowDistance);
+    
+    vibratoAmtSlider->setBounds (sliderArea.removeFromLeft (distanceBetween));
+    vibratoAmtSlider->setSize (distanceBetween, rowDistance);
+    
+    
+    volAttackSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    volAttackSlider->setSize (distanceBetween, rowDistance);
+    
+    volDecaySlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    volDecaySlider->setSize (distanceBetween, rowDistance);
+    
+    volSustainSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    volSustainSlider->setSize (distanceBetween, rowDistance);
+    
+    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    volReleaseSlider->setSize (distanceBetween, rowDistance);
+    
+    filAttackSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    filAttackSlider->setSize (distanceBetween, rowDistance);
+    
+    filDecaySlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    filDecaySlider->setSize (distanceBetween, rowDistance);
+    
+    filSustainSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    filSustainSlider->setSize (distanceBetween, rowDistance);
+    
+    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    filReleaseSlider->setSize (distanceBetween, rowDistance);
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     
