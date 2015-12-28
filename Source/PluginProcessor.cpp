@@ -206,10 +206,13 @@ public:
     
     void updateFilterParams ()
     {
-        if (cutoffKnob != cutoffKnobPrev
+        if (
+            cutoffKnob != cutoffKnobPrev
             || cutoffKeytrack != cutoffKeytrackPrev
             || voiceCurentNote != voiceCurentNotePrev
-            || (float) filterEnvelope.getenvelopeLevel() != filterEnvPrev)
+            || (float) filterEnvelope.getenvelopeLevel() != filterEnvPrev
+            )
+            
             {
                 float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
                 float cutoffFromENV = (135.0 - cutoffFromKeytrack) * filterEnvelope.getenvelopeLevel() * filterEnvAmt;
