@@ -29,7 +29,7 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     void timerCallback() override;
-    //void setupLabel (Label& labelToUse, juce::Component *sliderToUse);
+    void setupLabel (Label& labelToUse, juce::Component *sliderToUse);
     
 private:
     class ParameterSlider;

@@ -26,9 +26,9 @@ public:
         startTimerHz (30);
         updateSliderPos();
         Slider::setSliderStyle(Slider::Rotary);
-        Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 50, this->getTextBoxHeight());
+        Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::darkgrey);
-        Slider::setSize(50, 50);
+        Slider::setSize(60, 60);
     }
     
     void valueChanged() override
@@ -56,7 +56,7 @@ public:
     {
         addAndMakeVisible(newSlider = new ParameterSlider (param));
         //newSlider->setSliderStyle (Slider::Rotary);
-        newSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 50, newSlider->getTextBoxHeight());
+        newSlider->setTextBoxStyle (Slider::TextBoxBelow, false, 60, newSlider->getTextBoxHeight());
     }
     
     AudioProcessorParameter& param;
@@ -129,75 +129,42 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
 
     // add some labels for the sliders...
     
-    bendAmountLabel.attachToComponent(bendAmountSlider, false);
-    bendAmountLabel.setFont (Font (11.0f));
-    bendAmountLabel.setJustificationType(Justification::centredTop);
+    setupLabel(bendAmountLabel, bendAmountSlider);
     
-    detuneLabel.attachToComponent(detuneSlider, false);
-    detuneLabel.setFont(Font (11.0f));
-    detuneLabel.setJustificationType(Justification::centredTop);
+    setupLabel(detuneLabel, detuneSlider);
     
-    balanceLabel.attachToComponent(balanceSlider, false);
-    balanceLabel.setFont(Font (11.0f));
-    balanceLabel.setJustificationType(Justification::centredTop);
+    setupLabel(balanceLabel, balanceSlider);
     
-    cutoffLabel.attachToComponent(cutoffSlider, false);
-    cutoffLabel.setFont (Font (11.0f));
-    cutoffLabel.setJustificationType(Justification::centredTop);
+    setupLabel(cutoffLabel, cutoffSlider);
     
-    resonaceLabel.attachToComponent(resonaceSlider, false);
-    resonaceLabel.setFont (Font (11.0f));
-    resonaceLabel.setJustificationType(Justification::centredTop);
+    setupLabel(resonaceLabel, resonaceSlider);
     
-    keytrackLabel.attachToComponent(keytrackSlider, false);
-    keytrackLabel.setFont (Font (11.0f));
-    keytrackLabel.setJustificationType(Justification::centredTop);
+    setupLabel(keytrackLabel, keytrackSlider);
     
-    filEnvAmtLabel.attachToComponent(filEnvAmtSlider, false);
-    filEnvAmtLabel.setFont (Font (11.0f));
-    filEnvAmtLabel.setJustificationType(Justification::centredTop);
+    setupLabel(filEnvAmtLabel, filEnvAmtSlider);
     
-    lfoRateLabel.attachToComponent(lfoRateSlider, false);
-    lfoRateLabel.setFont (Font (11.0f));
-    lfoRateLabel.setJustificationType(Justification::centredTop);
+    setupLabel(lfoRateLabel, lfoRateSlider);
     
-    vibratoAmtLabel.attachToComponent(vibratoAmtSlider, false);
-    vibratoAmtLabel.setFont (Font (11.0f));
-    vibratoAmtLabel.setJustificationType(Justification::centredTop);
+    setupLabel(vibratoAmtLabel, vibratoAmtSlider);
     
     
-    volAttackLabel.attachToComponent(volAttackSlider, false);
-    volAttackLabel.setFont (Font (11.0f));
-    volAttackLabel.setJustificationType(Justification::centredTop);
+    setupLabel(volAttackLabel, volAttackSlider);
     
-    volDecayLabel.attachToComponent(volDecaySlider, false);
-    volDecayLabel.setFont (Font (11.0f));
-    volDecayLabel.setJustificationType(Justification::centredTop);
+    setupLabel(volDecayLabel, volDecaySlider);
     
-    volSustainLabel.attachToComponent(volSustainSlider, false);
-    volSustainLabel.setFont (Font (11.0f));
-    volSustainLabel.setJustificationType(Justification::centredTop);
+    setupLabel(volSustainLabel, volSustainSlider);
     
-    volReleaseLabel.attachToComponent(volReleaseSlider, false);
-    volReleaseLabel.setFont (Font (11.0f));
-    volReleaseLabel.setJustificationType(Justification::centredTop);
+    setupLabel(volReleaseLabel, volReleaseSlider);
     
     
-    filAttackLabel.attachToComponent(filAttackSlider, false);
-    filAttackLabel.setFont (Font (11.0f));
-    filAttackLabel.setJustificationType(Justification::centredTop);
+    setupLabel(filAttackLabel, filAttackSlider);
     
-    filDecayLabel.attachToComponent(filDecaySlider, false);
-    filDecayLabel.setFont (Font (11.0f));
-    filDecayLabel.setJustificationType(Justification::centredTop);
+    setupLabel(filDecayLabel, filDecaySlider);
     
-    filSustainLabel.attachToComponent(filSustainSlider, false);
-    filSustainLabel.setFont (Font (11.0f));
-    filSustainLabel.setJustificationType(Justification::centredTop);
+    setupLabel(filSustainLabel, filSustainSlider);
     
-    filReleaseLabel.attachToComponent(filReleaseSlider, false);
-    filReleaseLabel.setFont (Font (11.0f));
-    filReleaseLabel.setJustificationType(Justification::centredTop);
+    setupLabel(filReleaseLabel, filReleaseSlider);
+    
     
     // add the midi keyboard component..
     addAndMakeVisible (midiKeyboard);
@@ -209,7 +176,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     // add the triangular resizer component for the bottom-right of the UI
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
-    resizeLimits.setSizeLimits (400, 400, 2000, 1000);
+    resizeLimits.setSizeLimits (600, 400, 2000, 1000);
  
     
     // set our component's initial size to be the last one that was stored in the filter's settings
@@ -225,8 +192,14 @@ WavelandSynthAudioProcessorEditor::~WavelandSynthAudioProcessorEditor()
 }
 
 //==============================================================================
-//void WavelandSynthAudioProcessorEditor::setupLabel(Label& labelToUse, juce::Component *sliderToUse);
 
+void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce::Component *sliderToUse)
+{
+    addAndMakeVisible(labelToUse);
+    labelToUse.attachToComponent(sliderToUse, false);
+    labelToUse.setFont(Font (11.0f));
+    labelToUse.setJustificationType(Justification::centredTop);
+}
 
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
 {
@@ -244,68 +217,68 @@ void WavelandSynthAudioProcessorEditor::resized()
     timecodeDisplayLabel.setBounds (r.removeFromTop (26));
     midiKeyboard.setBounds (r.removeFromBottom (70));
     int sliderXY = 50;
-    int defaultsliderDistance = 60;
-    int divider = 10;
+    int sliderMinDistance = 60;
+    int divider = 9;
     
     r.removeFromTop (30);
     Rectangle<int> sliderArea;
     sliderArea.setBounds(r.getX() + 8, r.getY() + 26, r.getWidth() - 16, (r.getHeight() - 100) / 4);
+    int distanceBetween {sliderArea.getWidth()/divider};
     
-    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth()/ divider * 1)));
+    bendAmountSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     bendAmountSlider->setSize(sliderXY, sliderXY);
     
-    detuneSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 2)));
+    detuneSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     detuneSlider->setSize(sliderXY, sliderXY);
     
-    balanceSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 3)));
+    balanceSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     balanceSlider->setSize(sliderXY, sliderXY);
     
-    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 4)));
+    cutoffSlider->setBounds (sliderArea.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     cutoffSlider->setSize(sliderXY, sliderXY);
     
-    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 5)));
+    resonaceSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
     resonaceSlider->setSize(sliderXY, sliderXY);
     
-    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 6)));
+    keytrackSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
     keytrackSlider->setSize(sliderXY, sliderXY);
     
-    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 7)));
+    filEnvAmtSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
     filEnvAmtSlider->setSize(sliderXY, sliderXY);
     
-    lfoRateSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 8)));
+    lfoRateSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
     lfoRateSlider->setSize(sliderXY, sliderXY);
     
-    vibratoAmtSlider->setBounds(sliderArea.removeFromLeft(jmin (defaultsliderDistance, sliderArea.getWidth() / divider * 9)));
+    vibratoAmtSlider->setBounds(sliderArea.removeFromLeft(jmax (sliderMinDistance, distanceBetween)));
     vibratoAmtSlider->setSize(sliderXY, sliderXY);
     
     
     Rectangle<int> sliderRow2;
-    sliderRow2.setBounds(r.getX() + 8 , r.getY() + 150, r.getWidth() - 16, r.getHeight() /4);
+    sliderRow2.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 2, r.getWidth() - 16, r.getHeight() /4);
     
-    volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 1)));
+    volAttackSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     volAttackSlider->setSize(sliderXY, sliderXY);
     
-    volDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 2)));
+    volDecaySlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     volDecaySlider->setSize(sliderXY, sliderXY);
     
-    volSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 3)));
+    volSustainSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     volSustainSlider->setSize(sliderXY, sliderXY);
     
-    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 4)));
+    volReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     volReleaseSlider->setSize(sliderXY, sliderXY);
     
-    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 5)));
+    filAttackSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     filAttackSlider->setSize(sliderXY, sliderXY);
     
-    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 6)));
+    filDecaySlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     filDecaySlider->setSize(sliderXY, sliderXY);
     
-    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 7)));
+    filSustainSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     filSustainSlider->setSize(sliderXY, sliderXY);
     
-    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmin (defaultsliderDistance, sliderRow2.getWidth()/ divider * 8)));
+    filReleaseSlider->setBounds (sliderRow2.removeFromLeft (jmax (sliderMinDistance, distanceBetween)));
     filReleaseSlider->setSize(sliderXY, sliderXY);
-    
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     
