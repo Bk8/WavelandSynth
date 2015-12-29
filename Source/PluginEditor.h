@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "BackgroundImage.h"
 
 
 //==============================================================================
@@ -33,6 +34,9 @@ public:
     
 private:
     class ParameterSlider;
+    
+    BackgroundImage BackImageObj;
+    
     
     MidiKeyboardComponent midiKeyboard;
     

@@ -11,6 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Envelope.h"
+#include "BackgroundImage.h"
 
 //==============================================================================
 // This is a handy slider subclass that controls an AudioProcessorParameter
@@ -27,7 +28,8 @@ public:
         updateSliderPos();
         Slider::setSliderStyle(Slider::Rotary);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
-        Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::darkgrey);
+        Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightblue);
+        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::red);
         Slider::setSize(60, 60);
     }
     
@@ -89,6 +91,11 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       filSustainLabel ( String::empty, "FSustain:"),
       filReleaseLabel ( String::empty, "FRelease:")
 {
+ 
+    // add the background
+    
+    addAndMakeVisible(BackImageObj);
+    
     // add some sliders...
     
     addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
@@ -170,9 +177,12 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     addAndMakeVisible (midiKeyboard);
     
     // add a label that will display the current timecode and status..
+    /*
+     
     addAndMakeVisible (timecodeDisplayLabel);
     timecodeDisplayLabel.setColour (Label::textColourId, Colours::darkgrey);
     timecodeDisplayLabel.setFont (Font (Font::getDefaultMonospacedFontName(), 15.0f, Font::plain));
+     */
     
     // add the triangular resizer component for the bottom-right of the UI
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
@@ -200,7 +210,7 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
     labelToUse.setFont(Font (Font::getDefaultSansSerifFontName(), 15.0f, Font::plain));
     labelToUse.setSize(100, 20);
     //labelToUse.setColour(Label::backgroundColourId, juce::Colours::red);
-    labelToUse.setColour(Label::textColourId, juce::Colours::blue);
+    labelToUse.setColour(Label::textColourId, juce::Colours::red);
     labelToUse.setJustificationType(Justification::centredTop);
 }
 
@@ -216,17 +226,20 @@ void WavelandSynthAudioProcessorEditor::resized()
     // This lays out our child components...
     
     Rectangle<int> r (getLocalBounds().reduced (8));
+    BackImageObj.setBounds(0, 0, r.getWidth() + 16, r.getHeight() + 16);
+    BackImageObj.resized(r.getWidth() + 16, r.getHeight() + 16);
     
-    timecodeDisplayLabel.setBounds (r.removeFromTop (26));
+    //timecodeDisplayLabel.setBounds (r.removeFromTop (26));
     midiKeyboard.setBounds (r.removeFromBottom (70));
     int sliderMinDistance = 60;
     int divider = 9;
     
+    
     r.removeFromTop (30);
     Rectangle<int> sliderArea;
-    sliderArea.setBounds(r.getX() + 8, r.getY() + 26, r.getWidth() - 16, (r.getHeight() - 100) / 4);
+    sliderArea.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 3.5, r.getWidth() - 16, r.getHeight() / 4);
     Rectangle<int> sliderRow2;
-    sliderRow2.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 2, r.getWidth() - 16, r.getHeight() /4);
+    sliderRow2.setBounds(r.getX() + 8, r.getY() + sliderArea.getBottom(), r.getWidth() - 16, r.getHeight() /5);
     
     int distanceBetween {jmax (sliderArea.getWidth()/divider, sliderMinDistance)};
     int rowDistance {jmax (sliderRow2.getHeight(), sliderMinDistance)};

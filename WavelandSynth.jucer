@@ -23,6 +23,10 @@
       <FILE id="LNZaWS" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
       <FILE id="RxbMLR" name="Wavetable.cpp" compile="1" resource="0" file="Source/Wavetable.cpp"/>
       <FILE id="MPXz03" name="Wavetable.h" compile="0" resource="0" file="Source/Wavetable.h"/>
+      <FILE id="qfvUyy" name="BackgroundImage.cpp" compile="1" resource="0"
+            file="Source/BackgroundImage.cpp"/>
+      <FILE id="dKoV5U" name="BackgroundImage.h" compile="0" resource="0"
+            file="Source/BackgroundImage.h"/>
     </GROUP>
     <GROUP id="{E77AB2B7-56C7-ADA6-BDE2-70B942471F46}" name="Resources">
       <FILE id="SbNIo8" name="WaveLandBackground.jpg" compile="0" resource="1"
