@@ -29,7 +29,7 @@ public:
         Slider::setSliderStyle(Slider::Rotary);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightblue);
-        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::red);
+        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::darkcyan);
         Slider::setSize(60, 60);
     }
     
@@ -210,7 +210,7 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
     labelToUse.setFont(Font (Font::getDefaultSansSerifFontName(), 15.0f, Font::plain));
     labelToUse.setSize(100, 20);
     //labelToUse.setColour(Label::backgroundColourId, juce::Colours::red);
-    labelToUse.setColour(Label::textColourId, juce::Colours::red);
+    labelToUse.setColour(Label::textColourId, juce::Colours::lightblue);
     labelToUse.setJustificationType(Justification::centredTop);
 }
 
@@ -237,7 +237,7 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     r.removeFromTop (30);
     Rectangle<int> sliderArea;
-    sliderArea.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 3.5, r.getWidth() - 16, r.getHeight() / 4);
+    sliderArea.setBounds(r.getX() + 8, r.getY() + r.getHeight() / 2.5, r.getWidth() - 16, r.getHeight() / 4);
     Rectangle<int> sliderRow2;
     sliderRow2.setBounds(r.getX() + 8, r.getY() + sliderArea.getBottom(), r.getWidth() - 16, r.getHeight() /5);
     
