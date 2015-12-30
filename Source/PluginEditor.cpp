@@ -207,11 +207,12 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
 {
     addAndMakeVisible(labelToUse);
     labelToUse.attachToComponent(sliderToUse, false);
-    labelToUse.setFont(Font (Font::getDefaultSansSerifFontName(), 15.0f, Font::plain));
-    labelToUse.setSize(100, 20);
+    labelToUse.setFont(Font ("Calibri", 17.0f, Font::italic));
+    labelToUse.setSize(60, 20);
     //labelToUse.setColour(Label::backgroundColourId, juce::Colours::red);
     labelToUse.setColour(Label::textColourId, juce::Colours::lightblue);
-    labelToUse.setJustificationType(Justification::centredTop);
+    labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.15));
+    labelToUse.setJustificationType(Justification::centred);
 }
 
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
