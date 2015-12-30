@@ -416,7 +416,6 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
 
       gainParam(nullptr)
 {
-    lastPosInfo.resetToDefault();
 
     addParameter(bendAmountParam = new AudioParameterFloat ("bend", "Bend Amount", 0.0f, 1.0f, 0.5f));
     addParameter(detuneParam = new AudioParameterFloat ("detune", "Oscillator Detune", 0.0f, 1.0f, 1.0f));
@@ -539,25 +538,7 @@ void WavelandSynthAudioProcessor::process (AudioBuffer<FloatType>& buffer,
 
     for (int i = getTotalNumInputChannels(); i < getTotalNumOutputChannels(); ++i)
         buffer.clear (i, 0, numSamples);
-    
-    
-    updateCurrentTimeInfoFromHost();
-}
 
-void WavelandSynthAudioProcessor::updateCurrentTimeInfoFromHost()
-{
-    if (AudioPlayHead* ph = getPlayHead())
-    {
-        AudioPlayHead::CurrentPositionInfo newTime;
-        
-        if (ph->getCurrentPosition(newTime))
-        {
-            lastPosInfo = newTime;
-            return;
-        }
-    }
-    
-    lastPosInfo.resetToDefault();
 }
 
 //==============================================================================

@@ -182,14 +182,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     // add the midi keyboard component..
     addAndMakeVisible (midiKeyboard);
     
-    // add a label that will display the current timecode and status..
-    /*
-     
-    addAndMakeVisible (timecodeDisplayLabel);
-    timecodeDisplayLabel.setColour (Label::textColourId, Colours::darkgrey);
-    timecodeDisplayLabel.setFont (Font (Font::getDefaultMonospacedFontName(), 15.0f, Font::plain));
-     */
-    
     // add the triangular resizer component for the bottom-right of the UI
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
     resizeLimits.setSizeLimits (600, 400, 2000, 1000);
@@ -199,8 +191,6 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     setSize (owner.lastUIWidth,
              owner.lastUIHeight);
     
-    // start a timer which will keep our timecode display updated
-    startTimerHz (30);
 }
 
 WavelandSynthAudioProcessorEditor::~WavelandSynthAudioProcessorEditor()
@@ -234,8 +224,7 @@ void WavelandSynthAudioProcessorEditor::resized()
     Rectangle<int> r (getLocalBounds().reduced (8));
     BackImageObj.setBounds(0, 0, r.getWidth() + 16, r.getHeight() + 16);
     BackImageObj.resized(r.getWidth() + 16, r.getHeight() + 16);
-    
-    //timecodeDisplayLabel.setBounds (r.removeFromTop (26));
+
     midiKeyboard.setBounds (r.removeFromBottom (70));
     int sliderMinDistance = 60;
     int divider = 9;
@@ -309,66 +298,4 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     getProcessor().lastUIWidth = getWidth();
     getProcessor().lastUIHeight = getHeight();
-}
-
-//==============================================================================
-void WavelandSynthAudioProcessorEditor::timerCallback()
-{
-    updateTimecodeDisplay (getProcessor().lastPosInfo);
-}
-
-//==============================================================================
-// quick-and-dirty function to format a timecode string
-static String timeToTimecodeString (double seconds)
-{
-    const int millisecs = roundToInt (std::abs (seconds * 1000.0));
-    
-    return String::formatted ("%s%02d:%02d:%02d.%03d",
-                              seconds < 0 ? "-" : "",
-                              millisecs / 360000,
-                              (millisecs / 60000) % 60,
-                              (millisecs / 1000) % 60,
-                              millisecs % 1000);
-}
-
-// quick-and-dirty function to format a bars/beats string
-static String quarterNotePositionToBarsBeatsString (double quarterNotes, int numerator, int denominator)
-{
-    if (numerator == 0 || denominator == 0)
-        return "1|1|000";
-    
-    const int quarterNotesPerBar = (numerator * 4 / denominator);
-    const double beats  = (fmod (quarterNotes, quarterNotesPerBar) / quarterNotesPerBar) * numerator;
-    
-    const int bar    = ((int) quarterNotes) / quarterNotesPerBar + 1;
-    const int beat   = ((int) beats) + 1;
-    const int ticks  = ((int) (fmod (beats, 1.0) * 960.0 + 0.5));
-    
-    return String::formatted ("%d|%d|%03d", bar, beat, ticks);
-}
-
-// Updates the text in our position label.
-void WavelandSynthAudioProcessorEditor::updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo pos)
-{
-    if (lastDisplayedPosition != pos)
-    {
-        lastDisplayedPosition = pos;
-        
-        MemoryOutputStream displayText;
-        
-        displayText << "[" << SystemStats::getJUCEVersion() << "]   "
-        << String (pos.bpm, 2) << " bpm, "
-        << pos.timeSigNumerator << '/' << pos.timeSigDenominator
-        << "  -  " << timeToTimecodeString (pos.timeInSeconds)
-        << "  -  " << quarterNotePositionToBarsBeatsString (pos.ppqPosition,
-                                                            pos.timeSigNumerator,
-                                                            pos.timeSigDenominator);
-        
-        if (pos.isRecording)
-            displayText << "  (recording)";
-        else if (pos.isPlaying)
-            displayText << "  (playing)";
-        
-        timecodeDisplayLabel.setText (displayText.toString(), dontSendNotification);
-    }
 }

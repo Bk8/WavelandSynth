@@ -19,8 +19,8 @@
 //==============================================================================
 /** This is the editor component that our filter will display.
  */
-class WavelandSynthAudioProcessorEditor  : public AudioProcessorEditor,
-private Timer
+class WavelandSynthAudioProcessorEditor  : public AudioProcessorEditor/*,
+private Timer*/
 {
 public:
     WavelandSynthAudioProcessorEditor (WavelandSynthAudioProcessor&);
@@ -29,7 +29,6 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void timerCallback() override;
     void setupLabel (Label& labelToUse, juce::Component *sliderToUse);
     
 private:
@@ -59,7 +58,6 @@ private:
     ScopedPointer<ResizableCornerComponent> resizer;
     ComponentBoundsConstrainer resizeLimits;
     
-    AudioPlayHead::CurrentPositionInfo lastDisplayedPosition;
     
     //==============================================================================
     WavelandSynthAudioProcessor& getProcessor() const
@@ -67,7 +65,6 @@ private:
         return static_cast<WavelandSynthAudioProcessor&> (processor);
     }
     
-    void updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo);
 };
 
 
