@@ -28,8 +28,8 @@ public:
         updateSliderPos();
         Slider::setSliderStyle(Slider::Rotary);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
-        Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightblue);
-        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::darkcyan);
+        Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightcyan);
+        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::lightblue);
         Slider::setSize(60, 60);
     }
     
@@ -94,7 +94,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
  
     // add the background
     
-    addAndMakeVisible(BackImageObj);
+    addAndMakeVisible (BackImageObj);
     
     // add some sliders...
     

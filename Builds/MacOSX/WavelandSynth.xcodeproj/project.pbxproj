@@ -467,6 +467,7 @@
 		66DC78589FDEC1D63E64E72E = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_ZipFile.h"; path = "../../../../modules/juce_core/zip/juce_ZipFile.h"; sourceTree = "SOURCE_ROOT"; };
 		6722FEC89250F599976D0C8C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_SystemClipboard.h"; path = "../../../../modules/juce_gui_basics/keyboard/juce_SystemClipboard.h"; sourceTree = "SOURCE_ROOT"; };
 		676D15DC444EF84F464F5D9F = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AUOutputElement.cpp; path = "../../../../modules/juce_audio_plugin_client/AU/CoreAudioUtilityClasses/AUOutputElement.cpp"; sourceTree = "SOURCE_ROOT"; };
+		6776CF0373EE261F60588743 = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = WaveLandBackNoTitle.jpg; path = ../../Source/Resources/WaveLandBackNoTitle.jpg; sourceTree = "SOURCE_ROOT"; };
 		67A355AB3C1B4EF184390098 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_RTAS_DigiCode1.cpp"; path = "../../../../modules/juce_audio_plugin_client/RTAS/juce_RTAS_DigiCode1.cpp"; sourceTree = "SOURCE_ROOT"; };
 		67A947A410206A531B59F33C = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_linux_Windowing.cpp"; path = "../../../../modules/juce_gui_basics/native/juce_linux_Windowing.cpp"; sourceTree = "SOURCE_ROOT"; };
 		67B7CE3552B9379BD7C2D28C = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_MissingGLDefinitions.h"; path = "../../../../modules/juce_opengl/native/juce_MissingGLDefinitions.h"; sourceTree = "SOURCE_ROOT"; };
@@ -1082,7 +1083,8 @@
 					312CAF13F477B451581F32E7,
 					A9E570231B7D7C1ADB80CF52, ); name = Source; sourceTree = "<group>"; };
 		5D405690AC4A69E6A7642059 = {isa = PBXGroup; children = (
-					A8613614EB4038273D46D36C, ); name = Resources; sourceTree = "<group>"; };
+					A8613614EB4038273D46D36C,
+					6776CF0373EE261F60588743, ); name = Resources; sourceTree = "<group>"; };
 		96AC44B0370F40957786F8C6 = {isa = PBXGroup; children = (
 					655C5AB19A822D1E10C46F01,
 					5D405690AC4A69E6A7642059, ); name = WavelandSynth; sourceTree = "<group>"; };
