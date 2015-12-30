@@ -89,7 +89,9 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       filAttackLabel ( String::empty, "FAttack:"),
       filDecayLabel ( String::empty, "FDecay:"),
       filSustainLabel ( String::empty, "FSustain:"),
-      filReleaseLabel ( String::empty, "FRelease:")
+      filReleaseLabel ( String::empty, "FRelease:"),
+
+      gainLabel ( String::empty, "Gain")
 {
  
     // add the background
@@ -133,6 +135,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     addAndMakeVisible (filSustainSlider = new ParameterSlider (*owner.filEnvSusParam));
 
     addAndMakeVisible (filReleaseSlider = new ParameterSlider (*owner.filEnvRelParam));
+    
+    addAndMakeVisible(gainSlider = new ParameterSlider (*owner.gainParam));
 
     // add some labels for the sliders...
     
@@ -171,6 +175,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     setupLabel (filSustainLabel, filSustainSlider);
     
     setupLabel (filReleaseLabel, filReleaseSlider);
+    
+    setupLabel(gainLabel, gainSlider);
     
     
     // add the midi keyboard component..
@@ -296,6 +302,9 @@ void WavelandSynthAudioProcessorEditor::resized()
     
     filReleaseSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
     filReleaseSlider->setSize (distanceBetween, rowDistance);
+    
+    gainSlider->setBounds (sliderRow2.removeFromLeft (distanceBetween));
+    gainSlider->setSize (distanceBetween, rowDistance);
     
     resizer->setBounds (getWidth() - 16, getHeight() - 16, 16, 16);
     

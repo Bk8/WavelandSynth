@@ -46,11 +46,15 @@ private:
     Label volAttackLabel, volDecayLabel, volSustainLabel, volReleaseLabel;
     Label filAttackLabel, filDecayLabel, filSustainLabel, filReleaseLabel;
     
+    Label gainLabel;
+    
     ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider,
         keytrackSlider, filEnvAmtSlider,lfoRateSlider, vibratoAmtSlider;
     
     ScopedPointer<ParameterSlider> volAttackSlider, volDecaySlider, volSustainSlider, volReleaseSlider;
     ScopedPointer<ParameterSlider> filAttackSlider, filDecaySlider, filSustainSlider, filReleaseSlider;
+    
+    ScopedPointer<ParameterSlider> gainSlider;
     
     ScopedPointer<ResizableCornerComponent> resizer;
     ComponentBoundsConstrainer resizeLimits;

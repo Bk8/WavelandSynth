@@ -42,6 +42,7 @@ public:
       filterEnvAmt(1.0),
       lfoRate (0.0),
       vibratoAmount (0.0),
+      gain (0.7),
       filter1DelayTap1 (0.0),
       filter1DelayTap2 (0.0),
       filter1Sum3 (0.0),
@@ -101,19 +102,24 @@ public:
         cutoffKeytrack = keyParam;
     }
     
-    void SetFilterEnvAmt (float fltENVAmtParam)
+    void setFilterEnvAmt (float fltENVAmtParam)
     {
         filterEnvAmt = fltENVAmtParam;
     }
     
-    void SetLfoRate (float lfoRateParam)
+    void setLfoRate (float lfoRateParam)
     {
         lfoRate = lfoRateParam * 10.0;
     }
     
-    void SetVibratoAmt (float vibratoAmtParam)
+    void setVibratoAmt (float vibratoAmtParam)
     {
         vibratoAmount = vibratoAmtParam;
+    }
+    
+    void setGain (float gainParam)
+    {
+        gain = gainParam * 0.1 ;
     }
     
     void updateAngleDeltas ()
@@ -155,7 +161,7 @@ public:
         
         volumeEnvelope.startEnvelope();
         filterEnvelope.startEnvelope();
-        level = velocity * 0.10;
+        level = velocity * gain;
         
         updateAngleDeltas();
     }
@@ -370,7 +376,7 @@ private:
     const float twoPi = 2 * float_Pi;
     float currentAngleOSC1, currentAngleOSC2, angleDeltaOSC1, angleDeltaOSC2, level, sampleRate;
     float voiceCurentNote, voiceCurentNotePrev, currentPitchInHertzOSC1, currentPitchInHertzOSC2;
-    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, resonace, filterEnvAmt, lfoRate, vibratoAmount;
+    float bendAmount, detune, balance, cutoffKnob, cutoffKeytrack, resonace, filterEnvAmt, lfoRate, vibratoAmount, gain;
     float cutoffKnobPrev, cutoffKeytrackPrev, filterEnvPrev;
     float filterF, filterQ;
     float filter1DelayTap1, filter1DelayTap2, filter1Sum1, filter1Sum2, filter1Sum3, filter1Product1, filter1Product2, filter1Product3;
@@ -406,7 +412,9 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
       filEnvAttParam(nullptr),
       filEnvDecParam(nullptr),
       filEnvSusParam(nullptr),
-      filEnvRelParam(nullptr)
+      filEnvRelParam(nullptr),
+
+      gainParam(nullptr)
 {
     lastPosInfo.resetToDefault();
 
@@ -429,6 +437,8 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(filEnvDecParam = new AudioParameterFloat ("filDec", "Filter Decay", 0.0f, 1.0f, 0.0f));
     addParameter(filEnvSusParam = new AudioParameterFloat ("filSus", "Filter Sustain", 0.0f, 1.0f, 1.0f));
     addParameter(filEnvRelParam = new AudioParameterFloat ("filRel", "Filter Release", 0.0f, 1.0f, 0.01f));
+    
+    addParameter(gainParam = new AudioParameterFloat ("Gain","Synth Gain", 0.0f, 1.0f, 0.7f));
 
     initialiseSynth();
 }
@@ -445,9 +455,10 @@ void WavelandSynthAudioProcessor::updateParameters()
             myVoice->setCutoffKnob (*cutoffKnobParam);
             myVoice->setResonance (*resonaceParam);
             myVoice->setKeytrack (*keytrackParam);
-            myVoice->SetFilterEnvAmt (*filEnvAmtParam);
-            myVoice->SetLfoRate(*lfoRateParam);
-            myVoice->SetVibratoAmt(*vibratoAmtParam);
+            myVoice->setFilterEnvAmt (*filEnvAmtParam);
+            myVoice->setLfoRate(*lfoRateParam);
+            myVoice->setVibratoAmt(*vibratoAmtParam);
+            myVoice->setGain(*gainParam);
             myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
             myVoice->setfilEnvelopeParams (*filEnvAttParam, *filEnvDecParam, *filEnvSusParam, *filEnvRelParam);
             myVoice->updateFilterParams();
@@ -478,7 +489,8 @@ void WavelandSynthAudioProcessor::initialiseSynth()
                 myVoice->setCutoffKnob (*cutoffKnobParam);
                 myVoice->setResonance (*resonaceParam);
                 myVoice->setKeytrack (*keytrackParam);
-                myVoice->SetFilterEnvAmt (*filEnvAmtParam);
+                myVoice->setFilterEnvAmt (*filEnvAmtParam);
+                myVoice->setGain(*gainParam);
                 myVoice->setVolEnvelopeParams (*volEnvAttParam, *volEnvDecParam, *volEnvSusParam, *volEnvRelParam);
                 myVoice->setfilEnvelopeParams (*filEnvAttParam, *filEnvDecParam, *filEnvSusParam, *filEnvRelParam);
                 myVoice->innitFilter();
@@ -561,7 +573,7 @@ void WavelandSynthAudioProcessor::getStateInformation (MemoryBlock& destData)
     // Here's an example of how you can use XML to make it easy and more robust:
     
     // Create an outer XML element..
-    XmlElement xml ("MYPLUGINSETTINGS");
+    XmlElement xml ("MYPLUGINsetTINGS");
     
     //
     xml.setAttribute("uiWidth", lastUIWidth);
@@ -588,7 +600,7 @@ void WavelandSynthAudioProcessor::setStateInformation (const void* data, int siz
     if (xmlState != nullptr)
     {
         //
-        if (xmlState->hasTagName("MYPLUGINSETTINGS"))
+        if (xmlState->hasTagName("MYPLUGINsetTINGS"))
         {
             //
             lastUIWidth  = xmlState->getIntAttribute ("uiWidth", lastUIWidth);

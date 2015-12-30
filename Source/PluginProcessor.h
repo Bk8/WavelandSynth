@@ -114,6 +114,7 @@ public:
     AudioParameterFloat* filEnvSusParam;
     AudioParameterFloat* filEnvRelParam;
     
+    AudioParameterFloat* gainParam;
 
 private:
     //==============================================================================
