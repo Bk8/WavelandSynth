@@ -16,6 +16,7 @@
 //==============================================================================
 // This is a handy slider subclass that controls an AudioProcessorParameter
 // (may move this class into the library itself at some point in the future..)
+
 class WavelandSynthAudioProcessorEditor::ParameterSlider   : public Slider,
                                                              private Timer
 {
@@ -29,7 +30,7 @@ public:
         Slider::setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightcyan);
-        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::lightblue);
+        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::cyan.darker(0.2f));
         Slider::setColour(juce::Slider::textBoxBackgroundColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
         Slider::setColour(juce::Slider::textBoxOutlineColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
         Slider::setColour(juce::Slider::textBoxTextColourId, Colours::lightcyan);
@@ -97,6 +98,10 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       gainLabel ( String::empty, "Gain")
 {
  
+    // add the Look and Feel
+    
+    setLookAndFeel (&waveLookandFeel);
+    
     // add the background
     
     addAndMakeVisible (BackImageObj);
@@ -183,14 +188,17 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     
     // add the midi keyboard component..
+    
     addAndMakeVisible (midiKeyboard);
     
     // add the triangular resizer component for the bottom-right of the UI
+    
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
     resizeLimits.setSizeLimits (600, 400, 2000, 1000);
  
     
     // set our component's initial size to be the last one that was stored in the filter's settings
+    
     setSize (owner.lastUIWidth,
              owner.lastUIHeight);
     
