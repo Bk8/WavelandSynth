@@ -215,7 +215,6 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
     labelToUse.attachToComponent(sliderToUse, false);
     labelToUse.setFont(Font ("Calibri", 17.0f, Font::italic));
     labelToUse.setSize(60, 20);
-    //labelToUse.setColour(Label::backgroundColourId, juce::Colours::red);
     labelToUse.setColour(Label::textColourId, juce::Colours::lightblue);
     labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.15));
     labelToUse.setJustificationType(Justification::centred);
