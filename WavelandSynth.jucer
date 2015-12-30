@@ -29,8 +29,6 @@
             file="Source/BackgroundImage.h"/>
     </GROUP>
     <GROUP id="{E77AB2B7-56C7-ADA6-BDE2-70B942471F46}" name="Resources">
-      <FILE id="SbNIo8" name="WaveLandBackground.jpg" compile="0" resource="1"
-            file="Source/Resources/WaveLandBackground.jpg"/>
       <FILE id="o42AHh" name="WaveLandBackNoTitle.jpg" compile="0" resource="1"
             file="Source/Resources/WaveLandBackNoTitle.jpg"/>
     </GROUP>

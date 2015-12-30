@@ -718,7 +718,6 @@
 		A829B56B640B789CEE4CB925 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_mac_Network.mm"; path = "../../../../modules/juce_core/native/juce_mac_Network.mm"; sourceTree = "SOURCE_ROOT"; };
 		A82AB9CCC3CD5B7829682568 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		A84A04A22624BF0067070283 = {isa = PBXFileReference; lastKnownFileType = file; name = "juce_module_info"; path = "../../../../modules/juce_video/juce_module_info"; sourceTree = "SOURCE_ROOT"; };
-		A8613614EB4038273D46D36C = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = WaveLandBackground.jpg; path = ../../Source/Resources/WaveLandBackground.jpg; sourceTree = "SOURCE_ROOT"; };
 		A8926C7F942AA918846EE7A9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_AudioVisualiserComponent.h"; path = "../../../../modules/juce_audio_utils/gui/juce_AudioVisualiserComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		A89C826CAF26D5FBED776A31 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_Registry.cpp"; path = "../../../../modules/juce_core/native/juce_win32_Registry.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A8DDCE96308A2B2069D8967B = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_HighResolutionTimer.cpp"; path = "../../../../modules/juce_core/threads/juce_HighResolutionTimer.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -1083,7 +1082,6 @@
 					312CAF13F477B451581F32E7,
 					A9E570231B7D7C1ADB80CF52, ); name = Source; sourceTree = "<group>"; };
 		5D405690AC4A69E6A7642059 = {isa = PBXGroup; children = (
-					A8613614EB4038273D46D36C,
 					6776CF0373EE261F60588743, ); name = Resources; sourceTree = "<group>"; };
 		96AC44B0370F40957786F8C6 = {isa = PBXGroup; children = (
 					655C5AB19A822D1E10C46F01,
