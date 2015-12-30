@@ -26,10 +26,13 @@ public:
         setRange (0.0, 1.0, 0.0);
         startTimerHz (30);
         updateSliderPos();
-        Slider::setSliderStyle(Slider::Rotary);
+        Slider::setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightcyan);
         Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::lightblue);
+        Slider::setColour(juce::Slider::textBoxBackgroundColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
+        Slider::setColour(juce::Slider::textBoxOutlineColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
+        Slider::setColour(juce::Slider::textBoxTextColourId, Colours::lightcyan);
         Slider::setSize(60, 60);
     }
     
