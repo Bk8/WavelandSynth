@@ -63,23 +63,19 @@ public:
             float x1 = r.getTopLeft().getX(), y1 = r.getTopLeft().getY(), x2 = r.getBottomLeft().getX(), y2 = r.getBottomLeft().getY();
             t.transformPoints (x1, y1, x2, y2);
             
-            g.setColour(baseColour.darker(0.2f));
+            g.setColour(baseColour.darker(0.3f));
             
             Path knoboutline;
             knoboutline.addEllipse(rEnlarged);
             g.fillPath (knoboutline, t);
-            
-            g.setGradientFill (ColourGradient (baseColour, x1, y1,
-                                               baseColour.darker (0.1f), x2, y2,
-                                               false));
-    
+
             Path knob;
             knob.addEllipse(r);
             knobShadow.drawForPath(g, knoboutline);
-            g.setColour(Colours::white);
+            g.setColour(Colours::white.withAlpha(0.5f));
             g.fillPath(knob);
             g.setGradientFill (ColourGradient (baseColour, x1, y1,
-                                               baseColour.darker (0.1f), x2, y2,
+                                               baseColour.darker (0.2f), x2, y2,
                                                false));
             g.fillPath (knob, t);
             
@@ -87,7 +83,7 @@ public:
             Rectangle<float> r2 (r * 0.2f);
             needle.addEllipse (r2.withPosition (Point<float> (r.getCentreX() - (r2.getWidth() / 2.0f), r.getY())));
             
-            g.setColour (slider.findColour (Slider::rotarySliderOutlineColourId));
+            g.setColour (slider.findColour (Slider::rotarySliderOutlineColourId).withAlpha(0.7f));
             g.fillPath (needle, AffineTransform::rotation (angle, r.getCentreX(), r.getCentreY()));
         }
     };
@@ -109,6 +105,8 @@ private:
     Label filAttackLabel, filDecayLabel, filSustainLabel, filReleaseLabel;
     
     Label gainLabel;
+    
+    GlowEffect labelBackGroundGlow;
     
     ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider,
         keytrackSlider, filEnvAmtSlider,lfoRateSlider, vibratoAmtSlider;

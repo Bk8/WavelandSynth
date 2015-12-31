@@ -30,7 +30,7 @@
 BackgroundImage::BackgroundImage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
-    titleGlow.setGlowProperties(2.0f, Colours::cyan);
+    titleGlow.setGlowProperties(1.5f, Colours::cyan);
     //[/Constructor_pre]
 
     addAndMakeVisible (label = new Label ("titleLabel",

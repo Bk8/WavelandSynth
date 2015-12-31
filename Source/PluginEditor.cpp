@@ -148,6 +148,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
 
     // add some labels for the sliders...
     
+    labelBackGroundGlow.setGlowProperties(15.0f, Colours::black.withAlpha(0.15f));
+    
     setupLabel (bendAmountLabel, bendAmountSlider);
     
     setupLabel (detuneLabel, detuneSlider);
@@ -217,8 +219,10 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
     labelToUse.setFont(Font ("Calibri", 17.0f, Font::italic));
     labelToUse.setSize(60, 20);
     labelToUse.setColour(Label::textColourId, juce::Colours::lightblue);
-    labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.15));
+    labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.0));
     labelToUse.setJustificationType(Justification::centred);
+    labelToUse.setBorderSize(BorderSize<int> (12));
+    labelToUse.setComponentEffect(&labelBackGroundGlow);
 }
 
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
