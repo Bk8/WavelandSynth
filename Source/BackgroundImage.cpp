@@ -92,6 +92,7 @@ void BackgroundImage::resized(int newWidth, int newHeight)
     imageWidth = newWidth;
     imageHeight = newHeight;
     label->setBounds (0, 0, newWidth, newHeight / 4);
+    label->setFont(Font ("Takara", 72.00f, Font::plain).withExtraKerningFactor((newWidth/600.0f-1.0f)*0.5f));
     //[/UserPreResize]
     
     //[UserResized] Add your own custom resize handling here..

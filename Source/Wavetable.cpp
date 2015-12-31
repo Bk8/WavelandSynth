@@ -94,7 +94,7 @@ float Wavetable::saw1ofAngle (float angle)
 
 float Wavetable::mtf(float notenumber)
 {
-    if (notenumber < 0 || notenumber > 148)
+    if (notenumber < 0 || notenumber > 148 || std::isnan(notenumber))
     {
         return 1.0;
         
