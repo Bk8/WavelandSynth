@@ -58,6 +58,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     int imageHeight = 600;
     int imageWidth = 400;
+    GlowEffect titleGlow;
     //[/UserVariables]
 
     //==============================================================================

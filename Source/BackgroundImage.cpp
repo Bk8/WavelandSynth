@@ -30,6 +30,7 @@
 BackgroundImage::BackgroundImage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    titleGlow.setGlowProperties(1.5f, Colours::cyan);
     //[/Constructor_pre]
 
     addAndMakeVisible (label = new Label ("titleLabel",
@@ -50,6 +51,7 @@ BackgroundImage::BackgroundImage ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    label->setComponentEffect(&titleGlow);
     //[/Constructor]
 }
 
@@ -90,6 +92,7 @@ void BackgroundImage::resized(int newWidth, int newHeight)
     imageWidth = newWidth;
     imageHeight = newHeight;
     label->setBounds (0, 0, newWidth, newHeight / 4);
+    label->setFont(Font ("Takara", 72.00f, Font::plain).withExtraKerningFactor((newWidth/600.0f-1.0f)*0.5f));
     //[/UserPreResize]
     
     //[UserResized] Add your own custom resize handling here..

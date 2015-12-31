@@ -31,8 +31,67 @@ public:
     void resized() override;
     void setupLabel (Label& labelToUse, juce::Component *sliderToUse);
     
+    class WLSLookAndFeel : public LookAndFeel_V3
+    {
+    public:
+        WLSLookAndFeel():
+        knobShadow(Colours::black.withAlpha(0.3f), 1, Point<int>(0, 4))
+        {
+            
+        }
+        DropShadow knobShadow;
+        void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
+                               float rotaryStartAngle, float rotaryEndAngle, Slider& slider) override
+        {
+            const float diameter = jmin (width, height) - 4.0f;
+            const float radius = (diameter / 2.0f) * std::cos (float_Pi / 4.0f);
+            const float centreX = x + width * 0.5f;
+            const float centreY = y + height * 0.5f;
+            const float rx = centreX - radius;
+            const float ry = centreY - radius;
+            const float rw = radius * 2.0f;
+            const float angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+            const bool isMouseOver = slider.isMouseOverOrDragging() && slider.isEnabled();
+            
+            const Colour baseColour (slider.isEnabled() ? slider.findColour (Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 0.8f : 1.0f)
+                                     : Colour (0x80808080));
+            
+            Rectangle<float> r (rx, ry, rw, rw);
+            Rectangle<float> rEnlarged (rx - 2, ry - 2, rw + 4, rw + 4);
+            AffineTransform t (AffineTransform::rotation (angle, r.getCentreX(), r.getCentreY()));
+            
+            float x1 = r.getTopLeft().getX(), y1 = r.getTopLeft().getY(), x2 = r.getBottomLeft().getX(), y2 = r.getBottomLeft().getY();
+            t.transformPoints (x1, y1, x2, y2);
+            
+            g.setColour(baseColour.darker(0.3f));
+            
+            Path knoboutline;
+            knoboutline.addEllipse(rEnlarged);
+            g.fillPath (knoboutline, t);
+
+            Path knob;
+            knob.addEllipse(r);
+            knobShadow.drawForPath(g, knoboutline);
+            g.setColour(Colours::white.withAlpha(0.5f));
+            g.fillPath(knob);
+            g.setGradientFill (ColourGradient (baseColour, x1, y1,
+                                               baseColour.darker (0.2f), x2, y2,
+                                               false));
+            g.fillPath (knob, t);
+            
+            Path needle;
+            Rectangle<float> r2 (r * 0.2f);
+            needle.addEllipse (r2.withPosition (Point<float> (r.getCentreX() - (r2.getWidth() / 2.0f), r.getY())));
+            
+            g.setColour (slider.findColour (Slider::rotarySliderOutlineColourId).withAlpha(0.7f));
+            g.fillPath (needle, AffineTransform::rotation (angle, r.getCentreX(), r.getCentreY()));
+        }
+    };
+    
 private:
     class ParameterSlider;
+    
+    WLSLookAndFeel waveLookandFeel;
     
     BackgroundImage BackImageObj;
     
@@ -46,6 +105,8 @@ private:
     Label filAttackLabel, filDecayLabel, filSustainLabel, filReleaseLabel;
     
     Label gainLabel;
+    
+    GlowEffect labelBackGroundGlow;
     
     ScopedPointer<ParameterSlider> bendAmountSlider, detuneSlider,balanceSlider, cutoffSlider, resonaceSlider,
         keytrackSlider, filEnvAmtSlider,lfoRateSlider, vibratoAmtSlider;

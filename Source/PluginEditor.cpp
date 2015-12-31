@@ -16,6 +16,7 @@
 //==============================================================================
 // This is a handy slider subclass that controls an AudioProcessorParameter
 // (may move this class into the library itself at some point in the future..)
+
 class WavelandSynthAudioProcessorEditor::ParameterSlider   : public Slider,
                                                              private Timer
 {
@@ -29,7 +30,7 @@ public:
         Slider::setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightcyan);
-        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::lightblue);
+        Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::cyan.darker(0.2f));
         Slider::setColour(juce::Slider::textBoxBackgroundColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
         Slider::setColour(juce::Slider::textBoxOutlineColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
         Slider::setColour(juce::Slider::textBoxTextColourId, Colours::lightcyan);
@@ -73,7 +74,7 @@ public:
 WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSynthAudioProcessor& owner)
     : AudioProcessorEditor (owner),
       midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-      timecodeDisplayLabel (String::empty),
+
       bendAmountLabel (String::empty, "Bend Amount:"),
       detuneLabel (String::empty, "Detune:"),
       balanceLabel (String::empty, "OSC Balance:"),
@@ -95,8 +96,14 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       filReleaseLabel ( String::empty, "FRelease:"),
 
       gainLabel ( String::empty, "Gain")
+
+
 {
  
+    // add the Look and Feel
+    
+    setLookAndFeel (&waveLookandFeel);
+    
     // add the background
     
     addAndMakeVisible (BackImageObj);
@@ -143,6 +150,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
 
     // add some labels for the sliders...
     
+    labelBackGroundGlow.setGlowProperties(15.0f, Colours::black.withAlpha(0.15f));
+    
     setupLabel (bendAmountLabel, bendAmountSlider);
     
     setupLabel (detuneLabel, detuneSlider);
@@ -183,14 +192,18 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     
     // add the midi keyboard component..
+    
     addAndMakeVisible (midiKeyboard);
+    midiKeyboard.setColour(MidiKeyboardComponent::whiteNoteColourId, Colour(0xffccffff).darker(0.3f));
     
     // add the triangular resizer component for the bottom-right of the UI
+    
     addAndMakeVisible (resizer = new ResizableCornerComponent (this, &resizeLimits));
     resizeLimits.setSizeLimits (600, 400, 2000, 1000);
  
     
     // set our component's initial size to be the last one that was stored in the filter's settings
+    
     setSize (owner.lastUIWidth,
              owner.lastUIHeight);
     
@@ -209,8 +222,10 @@ void WavelandSynthAudioProcessorEditor::setupLabel(juce::Label& labelToUse, juce
     labelToUse.setFont(Font ("Calibri", 17.0f, Font::italic));
     labelToUse.setSize(60, 20);
     labelToUse.setColour(Label::textColourId, juce::Colours::lightblue);
-    labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.15));
+    labelToUse.setColour(Label::backgroundColourId, juce::Colour::fromFloatRGBA(0.0, 0.0, 0.0, 0.0));
     labelToUse.setJustificationType(Justification::centred);
+    labelToUse.setBorderSize(BorderSize<int> (12));
+    labelToUse.setComponentEffect(&labelBackGroundGlow);
 }
 
 void WavelandSynthAudioProcessorEditor::paint (Graphics& g)
