@@ -74,7 +74,7 @@ public:
 WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSynthAudioProcessor& owner)
     : AudioProcessorEditor (owner),
       midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-      timecodeDisplayLabel (String::empty),
+
       bendAmountLabel (String::empty, "Bend Amount:"),
       detuneLabel (String::empty, "Detune:"),
       balanceLabel (String::empty, "OSC Balance:"),
@@ -96,6 +96,8 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
       filReleaseLabel ( String::empty, "FRelease:"),
 
       gainLabel ( String::empty, "Gain")
+
+
 {
  
     // add the Look and Feel
@@ -192,6 +194,7 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     // add the midi keyboard component..
     
     addAndMakeVisible (midiKeyboard);
+    midiKeyboard.setColour(MidiKeyboardComponent::whiteNoteColourId, Colour(0xffccffff).darker(0.3f));
     
     // add the triangular resizer component for the bottom-right of the UI
     
