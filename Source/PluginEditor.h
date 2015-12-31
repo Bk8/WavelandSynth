@@ -34,11 +34,12 @@ public:
     class WLSLookAndFeel : public LookAndFeel_V3
     {
     public:
-        WLSLookAndFeel()
+        WLSLookAndFeel():
+        knobShadow(Colours::black.withAlpha(0.3f), 1, Point<int>(0, 4))
         {
             
         }
-        
+        DropShadow knobShadow;
         void drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                                float rotaryStartAngle, float rotaryEndAngle, Slider& slider) override
         {
@@ -74,6 +75,12 @@ public:
     
             Path knob;
             knob.addEllipse(r);
+            knobShadow.drawForPath(g, knoboutline);
+            g.setColour(Colours::white);
+            g.fillPath(knob);
+            g.setGradientFill (ColourGradient (baseColour, x1, y1,
+                                               baseColour.darker (0.1f), x2, y2,
+                                               false));
             g.fillPath (knob, t);
             
             Path needle;
