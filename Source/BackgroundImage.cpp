@@ -30,6 +30,7 @@
 BackgroundImage::BackgroundImage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
+    titleGlow.setGlowProperties(2.0f, Colours::cyan);
     //[/Constructor_pre]
 
     addAndMakeVisible (label = new Label ("titleLabel",
@@ -50,6 +51,7 @@ BackgroundImage::BackgroundImage ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    label->setComponentEffect(&titleGlow);
     //[/Constructor]
 }
 
