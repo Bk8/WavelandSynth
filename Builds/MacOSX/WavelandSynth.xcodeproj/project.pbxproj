@@ -387,6 +387,7 @@
 		543985AA12D7553386D6A16E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_DirectSound.cpp"; path = "../../../../modules/juce_audio_devices/native/juce_win32_DirectSound.cpp"; sourceTree = "SOURCE_ROOT"; };
 		5458E9ECF11F16370234432E = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_DirectShowComponent.cpp"; path = "../../../../modules/juce_video/native/juce_win32_DirectShowComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		5538A84A3AB99CCE0378C6D9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_BubbleMessageComponent.cpp"; path = "../../../../modules/juce_gui_extra/misc/juce_BubbleMessageComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
+		559A87D1BC8D6339C979CCC7 = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = Takara.ttf; path = ../../Source/Resources/Takara.ttf; sourceTree = "SOURCE_ROOT"; };
 		55BB48306281EB850FF0537B = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_FilenameComponent.h"; path = "../../../../modules/juce_gui_basics/filebrowser/juce_FilenameComponent.h"; sourceTree = "SOURCE_ROOT"; };
 		56042A70159A16E477F0FB85 = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_Process.h"; path = "../../../../modules/juce_core/threads/juce_Process.h"; sourceTree = "SOURCE_ROOT"; };
 		5606ABA4DC09EDB239A89BE3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_AudioFormatManager.cpp"; path = "../../../../modules/juce_audio_formats/format/juce_AudioFormatManager.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -1082,6 +1083,7 @@
 					312CAF13F477B451581F32E7,
 					A9E570231B7D7C1ADB80CF52, ); name = Source; sourceTree = "<group>"; };
 		5D405690AC4A69E6A7642059 = {isa = PBXGroup; children = (
+					559A87D1BC8D6339C979CCC7,
 					6776CF0373EE261F60588743, ); name = Resources; sourceTree = "<group>"; };
 		96AC44B0370F40957786F8C6 = {isa = PBXGroup; children = (
 					655C5AB19A822D1E10C46F01,

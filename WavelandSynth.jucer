@@ -29,6 +29,7 @@
             file="Source/BackgroundImage.h"/>
     </GROUP>
     <GROUP id="{E77AB2B7-56C7-ADA6-BDE2-70B942471F46}" name="Resources">
+      <FILE id="mRY1E4" name="Takara.ttf" compile="0" resource="1" file="Source/Resources/Takara.ttf"/>
       <FILE id="o42AHh" name="WaveLandBackNoTitle.jpg" compile="0" resource="1"
             file="Source/Resources/WaveLandBackNoTitle.jpg"/>
     </GROUP>

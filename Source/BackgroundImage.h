@@ -52,6 +52,8 @@ public:
     // Binary resources:
     static const char* waveLandBackNoTitle_jpg;
     static const int waveLandBackNoTitle_jpgSize;
+    static const char* takara_ttf;
+    static const int takara_ttfSize;
 
 
 private:
