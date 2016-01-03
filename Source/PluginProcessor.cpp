@@ -427,10 +427,10 @@ WavelandSynthAudioProcessor::WavelandSynthAudioProcessor()
     addParameter(lfoRateParam = new AudioParameterFloat ("lfoRate", "Lfo Rate", 0.0f, 1.0f, 0.6f));
     addParameter(vibratoAmtParam = new AudioParameterFloat ("vibratoAmt", "Vibrato Amount", 0.0f, 1.0f, 0.5f));
     
-    addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.0f));
+    addParameter(volEnvAttParam = new AudioParameterFloat ("volAtt", "Volume Attack", 0.0f, 1.0f, 0.01f));
     addParameter(volEnvDecParam = new AudioParameterFloat ("volDec", "Volume Decay", 0.0f, 1.0f, 0.0f));
     addParameter(volEnvSusParam = new AudioParameterFloat ("volSus", "Volume Sustain", 0.0f, 1.0f, 1.0f));
-    addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.01f));
+    addParameter(volEnvRelParam = new AudioParameterFloat ("volRel", "Volume Release", 0.0f, 1.0f, 0.05f));
     
     addParameter(filEnvAttParam = new AudioParameterFloat ("filAtt", "Filter Attack", 0.0f, 1.0f, 0.0f));
     addParameter(filEnvDecParam = new AudioParameterFloat ("filDec", "Filter Decay", 0.0f, 1.0f, 0.0f));

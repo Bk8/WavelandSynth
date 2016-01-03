@@ -40,7 +40,6 @@ public:
     void valueChanged() override
     {
         param.setValue ((float) Slider::getValue());
-        std::cout<<param.getParameterIndex()<<std::endl;
     }
     
     void timerCallback() override       { updateSliderPos(); }
