@@ -75,20 +75,14 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //==============================================================================
-    // These properties are public so that our editor component can access them
-    // A bit of a hacky way to do it, but it's only a demo! Obviously in your own
-    // code you'll do this much more neatly..
     
-    // this is kept up to date with the midi messages that arrive, and the UI component
-    // registers with it so it can represent the incoming messages
-    
-    // these are used to persist the UI's size - the values are stored along with the
-    // filter's other parameters, and the UI component will update them when it gets
-    // resized.
-    int lastUIWidth, lastUIHeight;
-    
-    // Our parameters
+    MidiKeyboardState& getMidiKeyboardState(){return keyboardState;}
 
+    int lastUIWidth, lastUIHeight;
+
+private:
+    //==============================================================================
+    
     AudioParameterFloat* bendAmountParam;
     AudioParameterFloat* detuneParam;
     AudioParameterFloat* balanceParam;
@@ -110,11 +104,6 @@ public:
     AudioParameterFloat* filEnvRelParam;
     
     AudioParameterFloat* gainParam;
-    
-    MidiKeyboardState& getMidiKeyboardState(){return keyboardState;}
-
-private:
-    //==============================================================================
     
     MidiKeyboardState keyboardState;
     

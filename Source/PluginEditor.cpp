@@ -111,43 +111,43 @@ WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSy
     
     // add some sliders...
     
-    addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.bendAmountParam));
+    addAndMakeVisible (bendAmountSlider = new ParameterSlider (*owner.getParameters()[0] ));
     
-    addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.detuneParam));
+    addAndMakeVisible (detuneSlider = new ParameterSlider(*owner.getParameters()[1] ));
     
-    addAndMakeVisible (balanceSlider = new ParameterSlider(*owner.balanceParam));
+    addAndMakeVisible (balanceSlider = new ParameterSlider(*owner.getParameters()[2] ));
     
-    addAndMakeVisible (cutoffSlider = new ParameterSlider (*owner.cutoffKnobParam));
+    addAndMakeVisible (cutoffSlider = new ParameterSlider(*owner.getParameters()[3] ));
     
-    addAndMakeVisible (resonaceSlider = new ParameterSlider (*owner.resonaceParam));
+    addAndMakeVisible (resonaceSlider = new ParameterSlider(*owner.getParameters()[4] ));
     
-    addAndMakeVisible (keytrackSlider = new ParameterSlider (*owner.keytrackParam));
+    addAndMakeVisible (keytrackSlider = new ParameterSlider(*owner.getParameters()[5] ));
     
-    addAndMakeVisible (filEnvAmtSlider = new ParameterSlider (*owner.filEnvAmtParam));
+    addAndMakeVisible (filEnvAmtSlider = new ParameterSlider(*owner.getParameters()[6] ));
     
-    addAndMakeVisible (lfoRateSlider = new ParameterSlider (*owner.lfoRateParam));
+    addAndMakeVisible (lfoRateSlider = new ParameterSlider(*owner.getParameters()[7] ));
     
-    addAndMakeVisible (vibratoAmtSlider = new ParameterSlider (*owner.vibratoAmtParam));
+    addAndMakeVisible (vibratoAmtSlider = new ParameterSlider(*owner.getParameters()[8] ));
     
     
-    addAndMakeVisible (volAttackSlider = new ParameterSlider (*owner.volEnvAttParam));
+    addAndMakeVisible (volAttackSlider = new ParameterSlider(*owner.getParameters()[9] ));
     
-    addAndMakeVisible (volDecaySlider = new ParameterSlider (*owner.volEnvDecParam));
+    addAndMakeVisible (volDecaySlider = new ParameterSlider(*owner.getParameters()[10] ));
 
-    addAndMakeVisible (volSustainSlider = new ParameterSlider (*owner.volEnvSusParam));
+    addAndMakeVisible (volSustainSlider = new ParameterSlider(*owner.getParameters()[11] ));
 
-    addAndMakeVisible (volReleaseSlider = new ParameterSlider (*owner.volEnvRelParam));
+    addAndMakeVisible (volReleaseSlider = new ParameterSlider(*owner.getParameters()[12] ));
     
     
-    addAndMakeVisible (filAttackSlider = new ParameterSlider (*owner.filEnvAttParam));
+    addAndMakeVisible (filAttackSlider = new ParameterSlider(*owner.getParameters()[13] ));
 
-    addAndMakeVisible (filDecaySlider = new ParameterSlider (*owner.filEnvDecParam));
+    addAndMakeVisible (filDecaySlider = new ParameterSlider(*owner.getParameters()[14] ));
 
-    addAndMakeVisible (filSustainSlider = new ParameterSlider (*owner.filEnvSusParam));
+    addAndMakeVisible (filSustainSlider = new ParameterSlider(*owner.getParameters()[15] ));
 
-    addAndMakeVisible (filReleaseSlider = new ParameterSlider (*owner.filEnvRelParam));
+    addAndMakeVisible (filReleaseSlider = new ParameterSlider(*owner.getParameters()[16] ));
     
-    addAndMakeVisible(gainSlider = new ParameterSlider (*owner.gainParam));
+    addAndMakeVisible(gainSlider = new ParameterSlider(*owner.getParameters()[17] ));
 
     // add some labels for the sliders...
     
