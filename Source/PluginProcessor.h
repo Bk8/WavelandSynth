@@ -81,7 +81,6 @@ public:
     
     // this is kept up to date with the midi messages that arrive, and the UI component
     // registers with it so it can represent the incoming messages
-    MidiKeyboardState keyboardState;
     
     // these are used to persist the UI's size - the values are stored along with the
     // filter's other parameters, and the UI component will update them when it gets
@@ -111,9 +110,14 @@ public:
     AudioParameterFloat* filEnvRelParam;
     
     AudioParameterFloat* gainParam;
+    
+    MidiKeyboardState& getMidiKeyboardState(){return keyboardState;}
 
 private:
     //==============================================================================
+    
+    MidiKeyboardState keyboardState;
+    
     template <typename FloatType>
     void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages);
     

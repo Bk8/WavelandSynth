@@ -40,6 +40,7 @@ public:
     void valueChanged() override
     {
         param.setValue ((float) Slider::getValue());
+        std::cout<<param.getParameterIndex()<<std::endl;
     }
     
     void timerCallback() override       { updateSliderPos(); }
@@ -73,7 +74,7 @@ public:
 //==============================================================================
 WavelandSynthAudioProcessorEditor::WavelandSynthAudioProcessorEditor (WavelandSynthAudioProcessor& owner)
     : AudioProcessorEditor (owner),
-      midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
+      midiKeyboard (owner.getMidiKeyboardState(), MidiKeyboardComponent::horizontalKeyboard),
 
       bendAmountLabel (String::empty, "Bend Amount:"),
       detuneLabel (String::empty, "Detune:"),
