@@ -41,8 +41,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "WavelandSynth";
-    const char* const  versionString  = "1.0.7";
-    const int          versionNumber  = 0x10007;
+    const char* const  versionString  = "1.0.8";
+    const int          versionNumber  = 0x10008;
 }
 #endif
 

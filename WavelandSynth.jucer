@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.7"
+<JUCERPROJECT id="MGuz4F" name="WavelandSynth" projectType="audioplug" version="1.0.8"
               bundleIdentifier="com.Snowland.WavelandSynth" includeBinaryInAppConfig="1"
               buildVST="1" buildVST3="1" buildAU="1" buildRTAS="0" buildAAX="0"
               pluginName="WavelandSynth" pluginDesc="WavelandSynth" pluginManufacturer="Snowland"
@@ -44,21 +44,21 @@
                        isDebug="0" optimisation="3" targetName="WavelandSynth"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_core" path="../../modules"/>
-        <MODULEPATH id="juce_events" path="../../modules"/>
-        <MODULEPATH id="juce_graphics" path="../../modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../modules"/>
-        <MODULEPATH id="juce_cryptography" path="../../modules"/>
-        <MODULEPATH id="juce_video" path="../../modules"/>
-        <MODULEPATH id="juce_opengl" path="../../modules"/>
-        <MODULEPATH id="juce_audio_basics" path="../../modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../modules"/>
+        <MODULEPATH id="juce_core" path="../../modules TIP"/>
+        <MODULEPATH id="juce_events" path="../../modules TIP"/>
+        <MODULEPATH id="juce_graphics" path="../../modules TIP"/>
+        <MODULEPATH id="juce_data_structures" path="../../modules TIP"/>
+        <MODULEPATH id="juce_gui_basics" path="../../modules TIP"/>
+        <MODULEPATH id="juce_gui_extra" path="../../modules TIP"/>
+        <MODULEPATH id="juce_cryptography" path="../../modules TIP"/>
+        <MODULEPATH id="juce_video" path="../../modules TIP"/>
+        <MODULEPATH id="juce_opengl" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_basics" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_devices" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_formats" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_processors" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../modules TIP"/>
+        <MODULEPATH id="juce_audio_utils" path="../../modules TIP"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
