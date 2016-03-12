@@ -18,11 +18,11 @@
 			<key>type</key>
 			<string>aumf</string>
 			<key>version</key>
-			<integer>65543</integer>
+			<integer>65544</integer>
 		</dict>
 	</array>
 	<key>BuildMachineOSBuild</key>
-	<string>15B42</string>
+	<string>15D21</string>
 	<key>CFBundleExecutable</key>
 	<string>WavelandSynth</string>
 	<key>CFBundleIdentifier</key>
@@ -32,7 +32,7 @@
 	<key>CFBundlePackageType</key>
 	<string>TDMw</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.7</string>
+	<string>1.0.8</string>
 	<key>CFBundleSignature</key>
 	<string>PTul</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -40,21 +40,21 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.7</string>
+	<string>1.0.8</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>7A1001</string>
+	<string>7C1002</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>15A278</string>
+	<string>15C43</string>
 	<key>DTSDKName</key>
 	<string>macosx10.11</string>
 	<key>DTXcode</key>
-	<string>0701</string>
+	<string>0721</string>
 	<key>DTXcodeBuild</key>
-	<string>7A1001</string>
+	<string>7C1002</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>

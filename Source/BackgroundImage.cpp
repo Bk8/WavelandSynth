@@ -31,7 +31,7 @@ BackgroundImage::BackgroundImage ()
 {
     //[Constructor_pre] You can add your own custom stuff here..
     titleGlow.setGlowProperties(1.5f, Colours::cyan);
-    Typeface::createSystemTypefaceFor(takara_ttf, takara_ttfSize);
+    takaraPtr = Typeface::createSystemTypefaceFor(takara_ttf, takara_ttfSize);
     //[/Constructor_pre]
 
     addAndMakeVisible (label = new Label ("titleLabel",
@@ -93,7 +93,8 @@ void BackgroundImage::resized(int newWidth, int newHeight)
     imageWidth = newWidth;
     imageHeight = newHeight;
     label->setBounds (0, 0, newWidth, newHeight / 4);
-    label->setFont(Font ("Takara", 72.00f, Font::plain).withExtraKerningFactor((newWidth/600.0f-1.0f)*0.5f));
+    label->setFont(Font (takaraPtr).withHeight(72.0f).withExtraKerningFactor((newWidth/600.0f-1.0f)*0.5f));
+    
     //[/UserPreResize]
 
     //label->setBounds (0, 0, 600, 104);

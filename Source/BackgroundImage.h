@@ -61,6 +61,7 @@ private:
     int imageHeight = 600;
     int imageWidth = 400;
     GlowEffect titleGlow;
+    Typeface::Ptr takaraPtr;
     //[/UserVariables]
 
     //==============================================================================

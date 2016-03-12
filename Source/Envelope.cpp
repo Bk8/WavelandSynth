@@ -13,11 +13,11 @@
 #include "Envelope.h"
 
 Envelope::Envelope ()
-    :   attack (0.0),
-        decay (0.0),
-        sustain (1.0),
-        release (0.0),
-        envelopeLevel(0.0),
+    :   attack (0.0f),
+        decay (0.0f),
+        sustain (1.0f),
+        release (0.0f),
+        envelopeLevel(0.0f),
         envelopeState (idleState)
     {
     }
@@ -87,9 +87,9 @@ void Envelope::endEnvelope()
     
 void Envelope::renderEnvelope ()
 {
-    double attackSlope = 1.0 / ((attack * sampleRate * 2.0) + 1.0);
-    double decaySlope = (1.0 - sustain) / ((decay * sampleRate * 2.0) + 1.0);
-    double releaseSlope = sustain / ((release * sampleRate * 2.0) + 1.0);
+    double attackSlope = 1.0f / ((attack * sampleRate * 2.0f) + 1.0f);
+    double decaySlope = (1.0f - sustain) / ((decay * sampleRate * 2.0f) + 1.0f);
+    double releaseSlope = sustain / ((release * sampleRate * 2.0f) + 1.0f);
     
     
     switch (envelopeState)
@@ -97,19 +97,19 @@ void Envelope::renderEnvelope ()
             
         case idleState:
             
-            envlopeTick = 0.0;
-            releasetick = 0.0;
-            envelopeLevel = 0.0;
+            envlopeTick = 0.0f;
+            releasetick = 0.0f;
+            envelopeLevel = 0.0f;
             break;
             
         case attackState:
             
             envelopeLevel += attackSlope;
             
-            if (envelopeLevel >= 1.0)
+            if (envelopeLevel >= 1.0f)
             {
                 envelopeState = decayState;
-                envelopeLevel = 1.0;
+                envelopeLevel = 1.0f;
             }
             
             ++envlopeTick;
@@ -142,9 +142,9 @@ void Envelope::renderEnvelope ()
             
             envelopeLevel -= releaseSlope;
             
-            if (envelopeLevel < 0.0)
+            if (envelopeLevel < 0.0f)
             {
-                envelopeLevel = 0.0;
+                envelopeLevel = 0.0f;
             }
             
             ++envlopeTick;

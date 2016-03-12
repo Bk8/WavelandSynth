@@ -32,28 +32,28 @@ class VitualAnalogVoice  : public SynthesiserVoice
 {
 public:
     VitualAnalogVoice()
-    : angleDeltaOSC1 (0.0),
-      angleDeltaOSC2 (0.0),
+    : angleDeltaOSC1 (0.0f),
+      angleDeltaOSC2 (0.0f),
       sampleRate (SynthesiserVoice::getSampleRate()),
-      balance(0.5),
-      cutoffKnob (0.5),
-      cutoffKeytrack (1.0),
-      resonace (0.5),
-      filterEnvAmt(1.0),
-      lfoRate (0.0),
-      vibratoAmount (0.0),
-      gain (0.7),
-      filter1DelayTap1 (0.0),
-      filter1DelayTap2 (0.0),
-      filter1Sum3 (0.0),
-      filter2DelayTap1 (0.0),
-      filter2DelayTap2 (0.0),
-      filter2Sum3 (0.0),
-      currentBend (0.0),
-      currentNote (0.0),
-      modWheel (0.0),
-      lfoCurrentAngle (0.0),
-      lfoAngleDelta (0.0)
+      balance(0.5f),
+      cutoffKnob (0.5f),
+      cutoffKeytrack (1.0f),
+      resonace (0.5f),
+      filterEnvAmt(1.0f),
+      lfoRate (0.0f),
+      vibratoAmount (0.0f),
+      gain (0.7f),
+      filter1DelayTap1 (0.0f),
+      filter1DelayTap2 (0.0f),
+      filter1Sum3 (0.0f),
+      filter2DelayTap1 (0.0f),
+      filter2DelayTap2 (0.0f),
+      filter2Sum3 (0.0f),
+      currentBend (0.0f),
+      currentNote (0.0f),
+      modWheel (0.0f),
+      lfoCurrentAngle (0.0f),
+      lfoAngleDelta (0.0f)
     
     {
         srand (static_cast <unsigned> (time(0)));
@@ -79,17 +79,17 @@ public:
 
     void setResonance (float resoparam)
     {
-        resonace = resoparam * 2.0 + 0.5;
+        resonace = resoparam * 2.0f + 0.5f;
     }
     
     void setbendAmount (float bendParam)
     {
-        bendAmount = bendParam * 2.0;
+        bendAmount = bendParam * 2.0f;
     }
 
     void setdetune (float detuneParam)
     {
-        detune = detuneParam * 0.1;
+        detune = detuneParam * 0.1f;
     }
 
     void setbalance (float balParam)
@@ -109,7 +109,7 @@ public:
     
     void setLfoRate (float lfoRateParam)
     {
-        lfoRate = lfoRateParam * 10.0;
+        lfoRate = lfoRateParam * 10.0f;
     }
     
     void setVibratoAmt (float vibratoAmtParam)
@@ -119,7 +119,7 @@ public:
     
     void setGain (float gainParam)
     {
-        gain = gainParam * 0.1 ;
+        gain = gainParam * 0.1f ;
     }
     
     void updateAngleDeltas ()
@@ -150,7 +150,7 @@ public:
         
         if (currentPitchWheelPosition <= 16383 && currentPitchWheelPosition >= 0)
         {
-            currentBend = (currentPitchWheelPosition - 8192.0)/8192.0;
+            currentBend = (currentPitchWheelPosition - 8192.0f)/8192.0f;
         }
         
         float startangleosc1 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/twoPi));
@@ -177,7 +177,7 @@ public:
     
     void pitchWheelMoved (int newValue) override
     {
-        currentBend = (newValue - 8192.0) / 8192.0;
+        currentBend = (newValue - 8192.0f) / 8192.0f;
         updateFilterParams();
     }
     
@@ -185,7 +185,7 @@ public:
     {
         if (controllerNumber == 1)
         {
-            modWheel = (float) newValue/ 127.0 * vibratoAmount;
+            modWheel = (float) newValue/ 127.0f * vibratoAmount;
         }
     }
     
@@ -221,21 +221,22 @@ public:
             
             {
                 float cutoffFromKeytrack = voiceCurentNote * cutoffKeytrack;
-                float cutoffFromENV = (135.0 - cutoffFromKeytrack) * filterEnvelope.getenvelopeLevel() * filterEnvAmt;
-                float cutoffFromKnob = (135.0 - cutoffFromKeytrack) * cutoffKnob;
+                float cutoffFromENV = (135.0f - cutoffFromKeytrack) * filterEnvelope.getenvelopeLevel() * filterEnvAmt;
+                float cutoffFromKnob = (135.0f - cutoffFromKeytrack) * cutoffKnob;
                 float cutoffNote = cutoffFromKnob + cutoffFromKeytrack + cutoffFromENV;
                 if (cutoffNote > 135)
                 {
                     cutoffNote = 135;
                 }
                 float cutoff = wavetableMath.mtf(cutoffNote);
-                filterF = 2.0 * wavetableMath.saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0) + float_Pi);;
+                filterF = 2.0 * wavetableMath.saw1ofAngle(float_Pi * cutoff / (sampleRate * 4.0f) + float_Pi);;
             }
-        cutoffKnobPrev = cutoffKnob * 1.0;
-        cutoffKeytrackPrev = cutoffKeytrack * 1.0;
-        voiceCurentNotePrev = voiceCurentNote * 1.0;
+        
+        cutoffKnobPrev = cutoffKnob * 1.0f;
+        cutoffKeytrackPrev = cutoffKeytrack * 1.0f;
+        voiceCurentNotePrev = voiceCurentNote * 1.0f;
         filterEnvPrev = (float) filterEnvelope.getenvelopeLevel();
-        filterQ = 1.0 / resonace;
+        filterQ = 1.0f / resonace;
         
     }
     
@@ -290,14 +291,14 @@ private:
     template <typename FloatType>
     void processBlock (AudioBuffer<FloatType>& outputBuffer, int startSample, int numSamples)
     {
-        if (angleDeltaOSC1 != 0.0 && angleDeltaOSC2 != 0.0)
+        if (angleDeltaOSC1 != 0.0f && angleDeltaOSC2 != 0.0f)
         {
             if (volumeEnvelope.getEnvelopeState() == Envelope::releaseState)
             {
                 while (--numSamples >= 0)
                 {
                     const FloatType currentSample =
-                    static_cast<FloatType>( filterSound(((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel())));
+                    static_cast<FloatType>( filterSound(((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0f - balance)) * level * volumeEnvelope.getenvelopeLevel())));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     {
@@ -324,16 +325,16 @@ private:
                     
                     ++startSample;
                     
-                    if (volumeEnvelope.getenvelopeLevel() <= 0.0)
+                    if (volumeEnvelope.getenvelopeLevel() <= 0.0f)
                     {
                         volumeEnvelope.setEnvelopeState(Envelope::idleState);
                         filterEnvelope.setEnvelopeState(Envelope::idleState);
                         clearCurrentNote();
-                        angleDeltaOSC1 = 0.0;
-                        angleDeltaOSC2 = 0.0;
-                        currentAngleOSC1 = 0.0;
-                        currentAngleOSC2 = 0.0;
-                        modWheel = 0.0;
+                        angleDeltaOSC1 = 0.0f;
+                        angleDeltaOSC2 = 0.0f;
+                        currentAngleOSC1 = 0.0f;
+                        currentAngleOSC2 = 0.0f;
+                        modWheel = 0.0f;
                         VAvoiceIsAcitve = false;
                         break;
                     }
@@ -343,7 +344,7 @@ private:
             {
                 while (--numSamples >= 0)
                 {
-                    const FloatType currentSample = static_cast<FloatType> (filterSound((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0 - balance)) * level * volumeEnvelope.getenvelopeLevel()));
+                    const FloatType currentSample = static_cast<FloatType> (filterSound((wavetableMath.sawOfAngle(currentAngleOSC1, currentPitchInHertzOSC1) * (balance) + wavetableMath.sawOfAngle(currentAngleOSC2, currentPitchInHertzOSC2) * (1.0f - balance)) * level * volumeEnvelope.getenvelopeLevel()));
                     
                     for (int i = outputBuffer.getNumChannels(); --i >= 0;)
                     {

@@ -24,15 +24,15 @@ public:
     ParameterSlider (AudioProcessorParameter& p)
     : Slider (p.getName (256)), param (p)
     {
-        setRange (0.0, 1.0, 0.0);
+        setRange (0.0f, 1.0f, 0.0f);
         startTimerHz (30);
         updateSliderPos();
         Slider::setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
         Slider::setTextBoxStyle(Slider::TextBoxBelow, false, 60, 15);
         Slider::setColour(juce::Slider::rotarySliderFillColourId, Colours::lightcyan);
         Slider::setColour(juce::Slider::rotarySliderOutlineColourId, Colours::cyan.darker(0.2f));
-        Slider::setColour(juce::Slider::textBoxBackgroundColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
-        Slider::setColour(juce::Slider::textBoxOutlineColourId, Colour::fromFloatRGBA (0.0, 0.0, 0.0, 0.0));
+        Slider::setColour(juce::Slider::textBoxBackgroundColourId, Colour::fromFloatRGBA (0.0f, 0.0f, 0.0f, 0.0f));
+        Slider::setColour(juce::Slider::textBoxOutlineColourId, Colour::fromFloatRGBA (0.0f, 0.0f, 0.0f, 0.0f));
         Slider::setColour(juce::Slider::textBoxTextColourId, Colours::lightcyan);
         Slider::setSize(60, 60);
     }
