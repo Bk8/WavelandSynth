@@ -1,4 +1,10 @@
 // This is an auto-generated file to redirect any included
 // module headers to the correct external folder.
 
-#include "../../../../../modules TIP/juce_audio_basics/juce_audio_basics.h"
+#if defined (JUCER_XCODE_MAC_F6D2F4CF)
+ #include "../../../../../modules TIP/juce_audio_basics/juce_audio_basics.h"
+#elif defined (JUCER_VS2015_78A5022)
+ #include "../../../../../modules/juce_audio_basics/juce_audio_basics.h"
+#else
+ #error "This file is designed to be used in an Introjucer-generated project!"
+#endif
